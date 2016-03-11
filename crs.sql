@@ -1,0 +1,56 @@
+DROP DATABASE IF EXISTS crs;
+CREATE DATABASE crs;
+\c crs
+
+CREATE TABLE administrator (
+    email varchar(35),
+    password varchar(35),
+    PRIMARY KEY (email));
+
+INSERT INTO administrator VALUES ('test@test.com', 'password');
+
+CREATE TABLE class (
+    class_code int,
+    class_name varchar(35),
+    PRIMARY KEY (class_code));
+
+INSERT INTO class VALUES (1234, 'History');
+
+CREATE TABLE question (
+    question_id serial,
+    question_type int not null,
+    question text,
+    admin_comments text,
+    image_filepath text,
+    PRIMARY KEY (question_id));
+    
+INSERT INTO question VALUES (DEFAULT, 0, 'What is 2 + 2?', 'This question is a math question.', 'file path goes here');
+INSERT INTO question VALUES (DEFAULT, 1, 'What color is the sky?', 'A sky question.', 'file path goes here');
+INSERT INTO question VALUES (DEFAULT, 2, 'Where is Peru?', 'Map Question', null);
+
+CREATE TABLE multiple_choice_question (
+    question_id int references question(question_id),
+    option_a text,
+    option_b text,
+    option_c text,
+    option_d text,
+    option_e text,
+    correct_answer int);
+    
+INSERT INTO multiple_choice_question VALUES (1, '3', '7', '4', null, null, 3);
+
+CREATE TABLE map_question (
+    question_id int references question(question_id),
+    map_filepath text,
+    answer_coordinates text);
+    
+INSERT INTO map_question VALUES (3, 'filepath', '235, 76');
+
+CREATE TABLE answers (
+    date date,
+    status int,
+    class_code int references class(class_code),
+    question_id int references question(question_id),
+    answer_filepath text);
+    
+INSERT INTO answers VALUES(null, 1, 1234, 1, 'bloop');
