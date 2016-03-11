@@ -53,4 +53,4 @@ CREATE TABLE answers (
     question_id int references question(question_id),
     answer_filepath text);
     
-INSERT INTO answers VALUES(null, 1, 1234, 1, 'bloop');
+INSERT INTO answers VALUES('2016-1-18', 1, 1234, 1, 'bloop');
