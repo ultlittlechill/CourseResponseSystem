@@ -4,11 +4,11 @@
 {% block content %}
 
 
-<form action="login.html">
+<form method="Get" action="{{url_for('login')}}">
   <input type="submit" value="Admin Login"  style="width:150px;height:150px;color:black;"/>
   
-  <form action="login.html">
-  <input type="submit" value="Student Login"   style="width:150px;height:150px;color:black;"/>
+  <form method="Get" action="{{url_for('login')}}">
+  <input type="submit" value="Student Login" style="width:150px;height:150px;color:black;"/>
   </form>
 </form>
         
