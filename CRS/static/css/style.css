@@ -14,10 +14,12 @@ body {
 input.submitButton {
     width: 20em;  height: 2em;
 }
-img {
-  max-width: 100%;
-  height: auto;
+fieldset{
+   border: solid 3px white;  
+   float:right;
 }
+
+
 
 h1, h2, h3, h4, h5, h6 {
   color: #494b52;
@@ -270,12 +272,12 @@ img + .brand_name {
 
 /*==================      Vide     ======================*/
 .vide {
-  padding-top: 117px;
-  padding-bottom: 170px;
+  padding-top: 300px;
+  padding-bottom: auto;
   background: #333333;
 }
 .vide_content {
-  position: relative;
+  position: center;
 }
 .vide h2 {
   font-weight: 700;

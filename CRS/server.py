@@ -53,6 +53,12 @@ def login():
          #return redirect(url_for('mainIndex',user=currentUser,c=ch))
     return render_template('login.html')
 
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    if request.method=='POST':
+        session.pop('username', None)
+        return redirect(url_for('mainIndex'))
+    return redirect(url_for('mainIndex'))
 
 
 

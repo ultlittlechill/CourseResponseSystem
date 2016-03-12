@@ -16,22 +16,30 @@
 
 
   <script src='js/device.min.js'></script>
+  
 </head>
 
 <body>
-<div class="page">
-  <!--========================================================
-                            HEADER
-  =========================================================-->
-  <header class="vide" data-vide-bg="video/video-bg">
-    <div class="container vide_content">
-      <div class="brand">
-        <img src="static/images/h.png" alt=""/>
-</div>
 
+<center>
+  {% if 'username' in session %} 
+        <form  method="POST" action="{{url_for('logout')}}">
+          <p><input type="submit" value="Logout" name="submit"style="color:black;" /></p>
+          </form>
+          {% endif %}
+          
+</center>
+
+      
+        
 {% block content %}{% endblock %}
+<p style=" position: absolute;left: 200px; bottom:40%  ">
+        <img src="static/images/h.png" alt=""  />
 
-  
+
+</p>
+
+
 
 </body>
 </html>
