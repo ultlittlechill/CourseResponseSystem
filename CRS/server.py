@@ -15,7 +15,7 @@ currentUser = ''
 
 
 def connectToDB():
-    connectionString='dbname=crs user=postgres password=maher123 host=localhost'
+    connectionString='dbname=crs user=postgres password=root host=localhost'
     print connectionString
     try:
         return psycopg2.connect(connectionString)
