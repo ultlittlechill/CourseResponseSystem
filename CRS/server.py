@@ -36,20 +36,20 @@ def login():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if 'username' in session:
         username_session = escape(session['username']).capitalize()
-        return redirect(url_for('mainIndex'))
+        return redirect(url_for('controlPanel'))
     if request.method == 'POST':
-      username = request.form['username']
-      currentUser = username
+            username = request.form['username']
+            currentUser = username
         
-      pw = request.form['password']
-      print pw
-      query = "select * from administrator WHERE email = '%s' AND password = '%s'" % (username, pw)
-      print query
-      cur.execute(query)
-      r=cur.fetchall()
-      if r:
-         session['username'] = request.form['username']
-         return redirect(url_for('controlPanel'))
+            pw = request.form['password']
+            print pw
+            query = "select * from administrator WHERE email = '%s' AND password = '%s'" % (username, pw)
+            print query
+            cur.execute(query)
+            r=cur.fetchall()
+            if r:
+                session['username'] = request.form['username']
+                return redirect(url_for('controlPanel'))
          #return redirect(url_for('mainIndex',user=currentUser,c=ch))
     return render_template('login.html')
 
@@ -63,28 +63,29 @@ def logout():
 def controlPanel():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = "select * from class " 
-    cur.execute(query)
-    results = cur.fetchall()
+    if 'username' in session:
+        query = "select * from class " 
+        cur.execute(query)
+        results = cur.fetchall()
     
-    if request.method == 'POST':
-      classname = request.form['classname']
+        if request.method == 'POST':
+            classname = request.form['classname']
         
-      classnumber = request.form['classnumber']
-      cur.execute("""INSERT INTO class
+            classnumber = request.form['classnumber']
+            cur.execute("""INSERT INTO class
              VALUES (%s, %s);""",[classnumber,classname] )
       
-      conn.commit()
+            conn.commit()
       
       
-      query = "select * from class " 
-      print query
-      cur.execute(query)
-      results = cur.fetchall()
-      return  render_template('controlPanel.html',results=results)
-      
-    return  render_template('controlPanel.html',results=results)
-
+            query = "select * from class " 
+            print query
+            cur.execute(query)
+            results = cur.fetchall()
+            return  render_template('controlPanel.html',results=results)
+    if 'username' not in session:  
+        return  redirect(url_for('mainIndex'))
+    return render_template('controlPanel.html',results=results)
 if __name__ == '__main__':
     app.debug=True
     app.run(host='0.0.0.0', port=8080)

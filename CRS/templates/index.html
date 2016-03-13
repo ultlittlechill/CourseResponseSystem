@@ -3,15 +3,25 @@
 
 {% block content %}
 
-<section style=" position: absolute;left: 700px; bottom:20%  ">
+<div style=" position: absolute;left: 700px; bottom:20%  ">
+    <table>
+        <tr>
+            <td>
+    <form action="/login" style="float:left;">
+        
+    <button type="submit" style="width:100px;height:50px;color:black;"><a>Admin Login </a></button>&nbsp; &nbsp;
+    </form>
     
-    
-    <button type="button" style="width:100px;height:50px;color:black;"><a href="/login">Admin Login </a></button>&nbsp; &nbsp;
-    <button type="button" style="width:100px;height:50px;color:black;"><a href="">Student Login </a></button>
+    </td>
+    <td>
+    <form>
+    <button type="submit" style="width:100px;height:50px;color:black;"><a href="">Student Login </a></button>
+    </form>
+    </td>
 
-
-
-</section>  
+</tr>
+</table>
+</div>  
 <p style=" position: absolute;left: 200px; bottom:40;  ">
         <img src="static/images/h.png" alt=""  />
 	</div><!--close site_content-->  	
