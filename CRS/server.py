@@ -49,17 +49,19 @@ def login():
       r=cur.fetchall()
       if r:
          session['username'] = request.form['username']
-         return render_template('index.html')
+         return redirect(url_for('controlPanel'))
          #return redirect(url_for('mainIndex',user=currentUser,c=ch))
     return render_template('login.html')
 
-@app.route('/logout', methods=['GET', 'POST'])
+@app.route('/logout')
 def logout():
-    if request.method=='POST':
-        session.pop('username', None)
-        return redirect(url_for('mainIndex'))
+    session.pop('username', None)
+        
     return redirect(url_for('mainIndex'))
 
+@app.route('/controlPanel', methods=['GET', 'POST'])
+def controlPanel():
+    return  render_template('controlPanel.html')
 
 
 if __name__ == '__main__':

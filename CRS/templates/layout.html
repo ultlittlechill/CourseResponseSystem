@@ -16,29 +16,37 @@
 
 
   <script src='js/device.min.js'></script>
-  
+  <div class="content_resize" align="center"> <img src="static/images/CRS.png" width="1000" height="200" alt="" class="ctop" />
+  {% if 'username' in session %}
+  <div id="menubar">
+        <ul id="nav">
+          <li><a  href="/controlPanel">Manage Classes</a></li>
+          <li><a href="">Manage Questions</a></li>
+          <li><a href="/logout">Logout </a></li>
+          
+        </ul>
+      </div>
+       {% endif %}
 </head>
 
 <body>
+  
 
 <center>
-  {% if 'username' in session %} 
-        <form  method="POST" action="{{url_for('logout')}}">
-          <p><input type="submit" value="Logout" name="submit"style="color:black;" /></p>
-          </form>
-          {% endif %}
+ 
           
 </center>
 
       
         
 {% block content %}{% endblock %}
-<p style=" position: absolute;left: 200px; bottom:40%  ">
+{% if 'username' not in session %} 
+<p style=" position: absolute;left: 200px; bottom:40;  ">
         <img src="static/images/h.png" alt=""  />
 
 
 </p>
-
+{% endif %}
 
 
 </body>

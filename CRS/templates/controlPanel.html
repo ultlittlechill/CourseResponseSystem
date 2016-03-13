@@ -1,0 +1,38 @@
+
+{% extends "layout.html" %}
+
+{% block content %}
+
+<section style=" position: absolute;left:29%;   ">
+    
+     
+  
+
+        <form method="post" style="float:center;">
+        
+				<fieldset class="sf" style="color:White; border-width:3px; "  >
+            <legend ><h1>Manage Classes</h1></legend>
+            
+            
+            <fieldset class="sf" style="color:White; border-width:3px;float:left "  >
+            <legend >Add Class</legend>
+				<p> 
+					<label for="class" class="class" data-icon="u" >  Class:  </label>
+					<input id="class" name="class" style="color:black;"  required="required" type="text" placeholder="Enter your class"/>
+					
+				</p>Class Code:
+				<input id="classnm" name="classnm" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
+				<p>
+					<input type="submit" value="Add Class" style="color:black;"/> 
+					</p>
+				</fieldset>
+				</fieldset>
+			</form>
+		
+
+
+
+</section>        
+ 
+        
+{% endblock %}
