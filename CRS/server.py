@@ -63,6 +63,7 @@ def logout():
 def controlPanel():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    i=1
     if 'username' in session:
         query = "select * from class " 
         cur.execute(query)
@@ -70,22 +71,23 @@ def controlPanel():
     
         if request.method == 'POST':
             classname = request.form['classname']
-        
+            
             classnumber = request.form['classnumber']
             cur.execute("""INSERT INTO class
              VALUES (%s, %s);""",[classnumber,classname] )
       
             conn.commit()
+            mess="your calss has been added!"
       
       
             query = "select * from class " 
             print query
             cur.execute(query)
             results = cur.fetchall()
-            return  render_template('controlPanel.html',results=results)
+            return  render_template('controlPanel.html',results=results,i=i, mess=mess)
     if 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('controlPanel.html',results=results)
+    return render_template('controlPanel.html',results=results,i=i)
 if __name__ == '__main__':
     app.debug=True
     app.run(host='0.0.0.0', port=8080)

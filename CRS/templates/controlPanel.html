@@ -8,7 +8,7 @@
      
   
 
-        <form method="post" style="float:center;">
+        <form method="post" style="float:center;" >
         
 				<fieldset class="sf" style="color:White; border-width:3px; "  >
             <legend ><h1>Manage Classes</h1></legend>
@@ -23,17 +23,19 @@
 				</p>Class Code:
 				<input id="classnumber" name="classnumber" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
 				<p>
-					<input type="submit" value="Create Class" style="color:black;"/> 
+					<input type="submit" value="Create Class" alert('Hello world!') style="color:black;"/> 
 					</p>
 				</fieldset>
 				
 				<fieldset class="sf" style="color:White; border-width:3px;float:left "  >
-            <legend >classes</legend>
+            <legend >Classes</legend>
             
             {% for r in results %}
-                <p>
+                <span>
+               <p>
                <input type="radio">{{r[1]}}
                </p>
+              </<span>
             {% endfor %}
             
             </fieldset>
@@ -46,7 +48,6 @@
 
 
 
-</section>        
- 
+
         
 {% endblock %}
