@@ -15,17 +15,31 @@
             
             
             <fieldset class="sf" style="color:White; border-width:3px;float:left "  >
-            <legend >Add Class</legend>
+            <legend >Create Class</legend>
 				<p> 
-					<label for="class" class="class" data-icon="u" >  Class:  </label>
-					<input id="class" name="class" style="color:black;"  required="required" type="text" placeholder="Enter your class"/>
+					<label for="class" class="class" data-icon="u" >  Class Name:  </label>
+					<input id="classname" name="classname" style="color:black;"  required="required" type="text" placeholder="Enter your class"/>
 					
 				</p>Class Code:
-				<input id="classnm" name="classnm" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
+				<input id="classnumber" name="classnumber" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
 				<p>
-					<input type="submit" value="Add Class" style="color:black;"/> 
+					<input type="submit" value="Create Class" style="color:black;"/> 
 					</p>
 				</fieldset>
+				
+				<fieldset class="sf" style="color:White; border-width:3px;float:left "  >
+            <legend >classes</legend>
+            
+            {% for r in results %}
+                <p>
+               <input type="radio">{{r[1]}}
+               </p>
+            {% endfor %}
+            
+            </fieldset>
+				
+				
+				
 				</fieldset>
 			</form>
 		

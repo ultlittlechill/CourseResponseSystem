@@ -61,8 +61,29 @@ def logout():
 
 @app.route('/controlPanel', methods=['GET', 'POST'])
 def controlPanel():
-    return  render_template('controlPanel.html')
-
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select * from class " 
+    cur.execute(query)
+    results = cur.fetchall()
+    
+    if request.method == 'POST':
+      classname = request.form['classname']
+        
+      classnumber = request.form['classnumber']
+      cur.execute("""INSERT INTO class
+             VALUES (%s, %s);""",[classnumber,classname] )
+      
+      conn.commit()
+      
+      
+      query = "select * from class " 
+      print query
+      cur.execute(query)
+      results = cur.fetchall()
+      return  render_template('controlPanel.html',results=results)
+      
+    return  render_template('controlPanel.html',results=results)
 
 if __name__ == '__main__':
     app.debug=True

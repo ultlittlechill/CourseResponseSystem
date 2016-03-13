@@ -31,22 +31,22 @@
 
 <body>
   
+<div id="site_content">		
 
-<center>
+      	
+	
+	  <div class="sidebar_container">       
+		<div class="sidebar">
+          <div class="sidebar_item">
+
+		
+			
+	
+	  <div id="content">
+        {% block content %}{% endblock %}
  
-          
-</center>
-
-      
-        
-{% block content %}{% endblock %}
-{% if 'username' not in session %} 
-<p style=" position: absolute;left: 200px; bottom:40;  ">
-        <img src="static/images/h.png" alt=""  />
 
 
-</p>
-{% endif %}
 
 
 </body>
