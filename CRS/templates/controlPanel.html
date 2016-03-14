@@ -2,20 +2,20 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div id="left">
+        <img src="static/images/class.png" alt=""  />
 
-<section style=" position: absolute;left:29%;   ">
+</div>
+
+
+<div id="right">
     
-     
-  
-
-        <div method="post" style="float:center;" >
-        
-				<fieldset class="sf" style="color:White; border-width:3px; "  >
+    <fieldset class="sf" style="color:White; border-width:3px; "  >
             <legend ><h1>Manage Classes</h1></legend>
             
             
             
-             <form method="post" style="float:center;" >
+             <form method="post" action="{{url_for('controlPanel')}}" >
             <fieldset class="sf" style="color:White; border-width:3px;float:left "  >
             <legend >Create Class</legend>
 				<p> 
@@ -25,29 +25,26 @@
 				</p>Class Code:
 				<input id="classnumber" name="classnumber" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
 				<p>
-					<button type="submit" style="color:black;"alert('Your class has been created!')><a>Create Class </a></button>
+					<button type="submit" style="color:black;"><a>Create Class </a></button>
 					</p>
 					</form>
 					<form method="post"action="{{url_for('delete')}}">
 				</fieldset>
-				
+		
 				<fieldset class="sf" style="color:White; border-width:3px;float:left "  >
             <legend >Classes</legend>
-             <Table>
-                
+             <div id="classes">
+
             {% for r in results %}
                 
-              
-               <tr>
-                   <td>
+                <div class="class">
                <input type="radio" name="classn" value="{{r[1]}}">{{r[1]}}
-               </td>
-               </tr>
+               </div>
                
               
             {% endfor %}
-            
-            </Table>
+
+            </div>
             
         
                 <button type="submit" style="color:black;"><a>Delete Class </a></button>&nbsp; &nbsp;
@@ -57,7 +54,26 @@
 				
 				
 				</fieldset>
-			</div>
+</div>
+
+
+
+
+
+
+
+<script>
+function reloadFunction() {
+    location.reload();
+}
+</script>
+
+
+    
+     
+  
+
+        
 		
 
 

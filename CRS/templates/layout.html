@@ -4,51 +4,50 @@
   <title>Home</title>
   <meta charset="utf-8">
   <meta name="format-detection" content="telephone=no"/>
-  <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="static/css/grid.css">
   <link rel="stylesheet" href="static/css/style.css">
-  <link rel="stylesheet" href="static/css/booking.css"/>
-  <link rel="stylesheet" href="static/css/jquery.fancybox.css"/>
-  <link rel="stylesheet" href="static/css/owl-carousel.css"/>
-
-  <script src="js/jquery.js"></script>
-  <script src="js/jquery-migrate-1.2.1.js"></script>
 
 
-  <script src='js/device.min.js'></script>
-  <div class="content_resize" align="center"> <img src="static/images/header.png" width="1000" height="200" alt="" class="ctop" />
-  {% if 'username' in session %}
+  
+  
+</head>
+
+<body>
+  
+  <center>
+    <div id="headeredge">
+  <div id="header">
+    <img src="static/images/header.png"  alt="" class="ctop" />
+  
   <div id="menubar">
+    {% if 'username' in session %}
         <ul id="nav">
           <li><a  href="/controlPanel">Manage Classes</a></li>
           <li><a href="">Manage Questions</a></li>
           <li><a href="/logout">Logout </a></li>
           
         </ul>
-      </div>
-       {% endif %}
-</head>
-
-<body>
+      
+       
+    
+  </div>
   
-<div id="site_content">		
-
-      	
-	
-	  <div class="sidebar_container">       
-		<div class="sidebar">
-          <div class="sidebar_item">
-
-		
-			
-	
-	  <div id="content">
+  {% endif %}
+  </div>
+  </div>
+  
+  
+  </center>
+  <div id="bodyborder">
+  <div id="all">
+    <center>
+<div id="sall">
+  <br>
         {% block content %}{% endblock %}
- 
-
-
-
-
+        <br>
+ </div>
+ </center>
+</div>
+</div>
 </body>
 </html>
     

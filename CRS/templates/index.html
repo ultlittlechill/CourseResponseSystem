@@ -3,7 +3,12 @@
 
 {% block content %}
 {% if 'username' not in session %}
-<div style=" position: absolute;left: 700px; bottom:20%  ">
+
+<div id="left">
+        <img src="static/images/h.png" alt=""  />
+
+</div>
+<div id="right">
     <table>
         <tr>
             <td>
@@ -15,24 +20,15 @@
     </td>
     <td>
     <form>
-    <button type="submit" style="width:100px;height:50px;color:black;"><a href="">Student Login </a></button>
+    <button type="submit" style="width:100px;height:50px;color:black;"><a >Student Login </a></button>
     </form>
     </td>
 
 </tr>
 </table>
-</div>  
-<p style=" position: absolute;left: 200px; bottom:40;  ">
-        <img src="static/images/h.png" alt=""  />
-	</div><!--close site_content-->  	
-  
-  </div><!--close main-->
-
-{% endif %}    
-      
+</div>
 
 
-</p>
- 
+ {% endif %} 
         
 {% endblock %}
