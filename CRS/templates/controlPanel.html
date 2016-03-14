@@ -8,10 +8,12 @@
      
   
 
-        <form method="post" style="float:center;" >
+        <div method="post" style="float:center;" >
         
 				<fieldset class="sf" style="color:White; border-width:3px; "  >
             <legend ><h1>Manage Classes</h1></legend>
+            
+            
             
              <form method="post" style="float:center;" >
             <fieldset class="sf" style="color:White; border-width:3px;float:left "  >
@@ -25,19 +27,28 @@
 				<p>
 					<button type="submit" style="color:black;"alert('Your class has been created!')><a>Create Class </a></button>
 					</p>
+					</form>
+					<form method="post"action="{{url_for('delete')}}">
 				</fieldset>
 				
 				<fieldset class="sf" style="color:White; border-width:3px;float:left "  >
             <legend >Classes</legend>
-            
+             <Table>
+                
             {% for r in results %}
-                <span>
-               <p>
+                
+              
+               <tr>
+                   <td>
                <input type="radio" name="classn" value="{{r[1]}}">{{r[1]}}
-               </p>
-              </<span>
+               </td>
+               </tr>
+               
+              
             {% endfor %}
-            <form action="" style="float:left;">
+            
+            </Table>
+            
         
                 <button type="submit" style="color:black;"><a>Delete Class </a></button>&nbsp; &nbsp;
             </form>
@@ -46,7 +57,7 @@
 				
 				
 				</fieldset>
-			</form>
+			</div>
 		
 
 

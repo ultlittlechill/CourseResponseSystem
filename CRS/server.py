@@ -88,6 +88,34 @@ def controlPanel():
     if 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanel.html',results=results,i=i)
+
+@app.route('/controlPaneld', methods=['GET', 'POST'])
+def delete():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if 'username' in session:
+        query = "select * from class " 
+        cur.execute(query)
+        results = cur.fetchall()
+    
+        if request.method == 'POST':
+            classname = request.form['classn']
+            cur.execute("DELETE FROM class WHERE class_name ilike %s",[classname] )
+      
+            conn.commit()
+            mess="your calss has been deleted!"
+      
+      
+            query = "select * from class " 
+            print query
+            cur.execute(query)
+            results = cur.fetchall()
+            return  render_template('controlPanel.html',results=results, mess=mess)
+    if 'username' not in session:  
+        return  redirect(url_for('mainIndex'))
+    return render_template('controlPanel.html',results=results)
+
+
 if __name__ == '__main__':
     app.debug=True
     app.run(host='0.0.0.0', port=8080)

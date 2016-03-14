@@ -2,7 +2,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
+{% if 'username' not in session %}
 <div style=" position: absolute;left: 700px; bottom:20%  ">
     <table>
         <tr>
@@ -28,7 +28,7 @@
   
   </div><!--close main-->
 
-      
+{% endif %}    
       
 
 
