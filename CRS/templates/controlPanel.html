@@ -13,7 +13,7 @@
 				<fieldset class="sf" style="color:White; border-width:3px; "  >
             <legend ><h1>Manage Classes</h1></legend>
             
-            
+             <form method="post" style="float:center;" >
             <fieldset class="sf" style="color:White; border-width:3px;float:left "  >
             <legend >Create Class</legend>
 				<p> 
@@ -23,7 +23,7 @@
 				</p>Class Code:
 				<input id="classnumber" name="classnumber" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
 				<p>
-					<input type="submit" value="Create Class" alert('Hello world!') style="color:black;"/> 
+					<button type="submit" style="color:black;"alert('Your class has been created!')><a>Create Class </a></button>
 					</p>
 				</fieldset>
 				
@@ -33,11 +33,14 @@
             {% for r in results %}
                 <span>
                <p>
-               <input type="radio">{{r[1]}}
+               <input type="radio" name="classn" value="{{r[1]}}">{{r[1]}}
                </p>
               </<span>
             {% endfor %}
-            
+            <form action="" style="float:left;">
+        
+                <button type="submit" style="color:black;"><a>Delete Class </a></button>&nbsp; &nbsp;
+            </form>
             </fieldset>
 				
 				
