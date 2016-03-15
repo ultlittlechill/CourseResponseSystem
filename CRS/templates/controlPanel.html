@@ -2,58 +2,69 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div id="left">
-        <img src="static/images/class.png" alt=""  />
 
-</div>
+<div id="img">
 
+        <img src="static/images/class.png" alt="" width="450" height="309.6" />
+
+    </div>
 
 <div id="right">
-    
-    <fieldset class="sf" style="color:White; border-width:3px; "  >
-            <legend ><h1>Manage Classes</h1></legend>
-            
-            
-            
-             <form method="post" action="{{url_for('controlPanel')}}" >
-            <fieldset class="sf" style="color:White; border-width:3px;float:left "  >
-            <legend >Create Class</legend>
-				<p> 
-					<label for="class" class="class" data-icon="u" >  Class Name:  </label>
-					<input id="classname" name="classname" style="color:black;"  required="required" type="text" placeholder="Enter your class"/>
-					
-				</p>Class Code:
-				<input id="classnumber" name="classnumber" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
-				<p>
-					<button type="submit" style="color:black;"><a>Create Class </a></button>
-					</p>
-					</form>
-					<form method="post"action="{{url_for('delete')}}">
-				</fieldset>
-		
-				<fieldset class="sf" style="color:White; border-width:3px;float:left "  >
-            <legend >Classes</legend>
-             <div id="classes">
 
-            {% for r in results %}
-                
-                <div class="class">
-               <input type="radio" name="classn" value="{{r[1]}}">{{r[1]}}
-               </div>
-               
-              
-            {% endfor %}
+    
+
+    <div id="mngc">
+
+        <fieldset class="sf" style="color:black; border-width:3px; "  >
+            <legend ><h1>Manage Classes</h1></legend>
+
+            <div id="creatClass">
+                <form method="post" action="{{url_for('controlPanel')}}" >
+                    <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
+
+                        <legend >Create Class</legend>
+                        <p> 
+                            <label for="class" class="class" data-icon="u" >  Class Name:  </label>
+                            <input id="classname" name="classname" style="color:black;"  required="required" type="text" placeholder="Enter your class"/>
+
+                        </p>Class Code:
+                        <input id="classnumber" name="classnumber" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
+                        <p>
+                            <button type="submit" style="color:black;"><a>Create Class </a></button>
+                        </p>
+                    </fieldset>
+                </form>
 
             </div>
-            
-        
-                <button type="submit" style="color:black;"><a>Delete Class </a></button>&nbsp; &nbsp;
-            </form>
-            </fieldset>
-				
-				
-				
-				</fieldset>
+            <div id="classes">
+                
+                    <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
+                         <legend >Classes</legend>
+                        <form method="post" action="{{url_for('delete')}}">
+                       
+                <div id="classesNames">
+
+                        {% for r in results %}
+
+                        <div class="class">
+                            <input type="radio" name="classn" value="{{r[1]}}">{{r[1]}}</input>
+                        </div>
+
+
+                        {% endfor %}
+              </div>
+
+                    <br/>
+
+                        <button type="submit" style="color:black;"><a>Delete Class </a></button>&nbsp; &nbsp;
+ </form>
+                    </fieldset>
+               
+            </div>	
+
+
+        </fieldset>
+    </div>
 </div>
 
 
@@ -63,21 +74,21 @@
 
 
 <script>
-function reloadFunction() {
-    location.reload();
-}
+    function reloadFunction() {
+        location.reload();
+    }
 </script>
 
 
-    
-     
-  
-
-        
-		
 
 
 
 
-        
+
+
+
+
+
+
+
 {% endblock %}
