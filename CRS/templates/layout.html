@@ -5,13 +5,14 @@
   <meta charset="utf-8">
   <meta name="format-detection" content="telephone=no"/>
   <link rel="stylesheet" href="static/css/style.css">
-
-
   
   
 </head>
 
 <body>
+  
+  
+  
   
   <center>
     <div id="headeredge">
@@ -19,8 +20,11 @@
     <img src="static/images/header.png"  alt="" class="ctop" />
   
   <div id="menubar">
+    <ul id="nav">
+    {% if 'username' not in session  %}<li><a  href="/">Home</a></li>{% endif %}
     {% if 'username' in session %}
-        <ul id="nav">
+        
+          
           <li><a  href="/controlPanel">Manage Classes</a></li>
           <li><a href="">Manage Questions</a></li>
           <li><a href="/logout">Logout </a></li>

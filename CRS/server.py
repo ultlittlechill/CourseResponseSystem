@@ -71,25 +71,29 @@ def controlPanel():
     
         if request.method == 'POST':
             classname = request.form['classname']
+            try:
+                classnumber = request.form['classnumber']
+                cur.execute("""INSERT INTO class
+                 VALUES (%s, %s);""",[classnumber,classname] )
+      
+                conn.commit()
+            except:
+                
+                mess="The class code is already existed!"
+                return  redirect(url_for('controlPanel',mess=mess))
+      
             
-            classnumber = request.form['classnumber']
-            cur.execute("""INSERT INTO class
-             VALUES (%s, %s);""",[classnumber,classname] )
-      
-            conn.commit()
-            mess="your calss has been added!"
-      
-      
             query = "select * from class " 
             print query
             cur.execute(query)
             results = cur.fetchall()
-            return  render_template('controlPanel.html',results=results,i=i, mess=mess)
+            mess="Your calss has been created"
+            return  redirect(url_for('controlPanel',mess=mess))    
     if 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('controlPanel.html',results=results,i=i)
+    return render_template('controlPanel.html',results=results)
 
-@app.route('/controlPaneld', methods=['GET', 'POST'])
+@app.route('/controlPanelD', methods=['GET', 'POST'])
 def delete():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -103,14 +107,14 @@ def delete():
             cur.execute("DELETE FROM class WHERE class_name ilike %s",[classname] )
       
             conn.commit()
-            mess="your calss has been deleted!"
+            mess="Your calss has been deleted!"
       
       
             query = "select * from class " 
             print query
             cur.execute(query)
             results = cur.fetchall()
-            return  render_template('controlPanel.html',results=results, mess=mess)
+            return  redirect(url_for('controlPanel',mess=mess))
     if 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanel.html',results=results)

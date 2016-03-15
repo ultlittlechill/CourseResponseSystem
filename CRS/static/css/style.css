@@ -134,7 +134,7 @@ button:hover{
 
 #classes{
 display: table-cell;
-  width:200px;
+  width:2000x;
   
    min-height:150px;
   max-height:150px;
@@ -157,4 +157,7 @@ display: table-cell;
   max-width:200px;
    min-width:100px;
 }
+
+
+
 

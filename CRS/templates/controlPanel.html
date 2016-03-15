@@ -1,7 +1,11 @@
 
 {% extends "layout.html" %}
 
+
+
+
 {% block content %}
+<h4 style="color:red;">{{request.args.get('mess', '')}}</h4>
 
 <div id="img">
 
@@ -22,7 +26,7 @@
                 <form method="post" action="{{url_for('controlPanel')}}" >
                     <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
 
-                        <legend >Create Class</legend>
+                        <legend ><h4>Create Class</h4></legend>
                         <p> 
                             <label for="class" class="class" data-icon="u" >  Class Name:  </label>
                             <input id="classname" name="classname" style="color:black;"  required="required" type="text" placeholder="Enter your class"/>
@@ -39,7 +43,7 @@
             <div id="classes">
                 
                     <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
-                         <legend >Classes</legend>
+                         <legend ><h4>Classes</h4></legend>
                         <form method="post" action="{{url_for('delete')}}">
                        
                 <div id="classesNames">
@@ -56,7 +60,7 @@
 
                     <br/>
 
-                        <button type="submit" style="color:black;"><a>Delete Class </a></button>&nbsp; &nbsp;
+                        <button type="submit" id="" style="color:black;"><a>Delete Class </a></button>&nbsp; &nbsp;
  </form>
                     </fieldset>
                
