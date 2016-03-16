@@ -7,9 +7,24 @@
   <link rel="stylesheet" href="static/css/style.css">
   
   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  
+  
+  
 </head>
 
 <body>
+  
+  
+ <script >
+    $( document ).ready(function() {
+    $("#infor").delay(3000).fadeOut("slow");
+});
+  </script>
+    
+  
+  
+
   
   
   
@@ -26,14 +41,24 @@
         
           
           <li><a  href="/controlPanel">Manage Classes</a></li>
-          <li><a href="">Manage Questions</a></li>
+          <li><a href="/controlPanelMQ">Manage Questions</a></li>
           <li><a href="/logout">Logout </a></li>
           
         </ul>
       
-       
+      
     
   </div>
+  
+  <div id="infor" >
+
+{% if request.args.get('notification', '') =='error' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
+{% if request.args.get('notification', '') =='success' %}<div class="alert-box success"><span>success: </span>{{request.args.get('mess', '')}}</div>{% endif %}
+{% if request.args.get('notification', '') =='warning' %}<div class="alert-box warning"><span>warning: </span>{{request.args.get('mess', '')}}</div>{% endif %}
+{% if request.args.get('notification', '') =='notice' %}<div class="alert-box notice"><span>notice: </span>{{request.args.get('mess', '')}}</div>{% endif %}
+
+
+</div> 
   
   {% endif %}
   </div>
@@ -45,7 +70,9 @@
   <div id="all">
     <center>
 <div id="sall">
-  <br>
+  <br><br><br>
+    
+  
         {% block content %}{% endblock %}
         <br>
  </div>

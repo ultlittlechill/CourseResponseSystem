@@ -80,7 +80,8 @@ def controlPanel():
             except:
                 
                 mess="The class code is already existed!"
-                return  redirect(url_for('controlPanel',mess=mess))
+                notification="error"
+                return  redirect(url_for('controlPanel',mess=mess,notification=notification))
       
             
             query = "select * from class " 
@@ -88,7 +89,8 @@ def controlPanel():
             cur.execute(query)
             results = cur.fetchall()
             mess="Your calss has been created"
-            return  redirect(url_for('controlPanel',mess=mess))    
+            notification="success"
+            return  redirect(url_for('controlPanel',mess=mess,notification=notification))    
     if 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanel.html',results=results)
@@ -103,21 +105,75 @@ def delete():
         results = cur.fetchall()
     
         if request.method == 'POST':
-            classname = request.form['classn']
-            cur.execute("DELETE FROM class WHERE class_name ilike %s",[classname] )
+            if request.form['submit']=='Delete':
+                classname = request.form['classn']
+                cur.execute("DELETE FROM class WHERE class_name ilike %s",[classname] )
       
-            conn.commit()
-            mess="Your calss has been deleted!"
-      
-      
-            query = "select * from class " 
-            print query
-            cur.execute(query)
-            results = cur.fetchall()
-            return  redirect(url_for('controlPanel',mess=mess))
+                conn.commit()
+                mess="Your calss has been deleted!"
+                notification="success"
+                query = "select * from class " 
+                print query
+                cur.execute(query)
+                results = cur.fetchall()
+                return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+            elif request.form['submit']=='Edit':
+                 classname = request.form['classn']
+                 cur.execute("select * FROM class WHERE class_name ilike %s",[classname] )
+                 results = cur.fetchall()
+                 for r in results:
+                     name=r[1]
+                     code=r[0]
+                     print name,code
+                     
+                 return redirect(url_for('edit',code=code,name=name))
+                
     if 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanel.html',results=results)
+
+
+
+@app.route('/controlPanelE', methods=['GET', 'POST'])
+def edit():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if 'username' in session:
+        if request.method == 'POST':
+            if request.form['submit']=='Save':
+                print"Y it is not working",
+                classname = request.form['classn']
+                print classname
+                classc = request.form['classcode']
+                print classc
+                
+                cur.execute("UPDATE class SET class_name = %s WHERE class_code = %s",[classname,classc] )
+      
+                conn.commit()
+                mess="Your class info has been updated!"
+                notification="success"
+                return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+            elif request.form['submit']=='Cancel':
+                 mess="Nothing has been updated!"
+                 notification="notice"
+                 return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+                
+    if 'username' not in session:  
+        return  redirect(url_for('mainIndex'))
+    return render_template('controlPanelE.html')
+
+
+@app.route('/controlPanelMQ', methods=['GET', 'POST'])
+def manageQuestion():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if 'username' in session:
+        if request.method == 'POST':
+            return render_template('controlPanelMQ.html')
+    if 'username' not in session:  
+        return  redirect(url_for('mainIndex'))
+    return render_template('controlPanelMQ.html')    
+
 
 
 if __name__ == '__main__':

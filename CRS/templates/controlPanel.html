@@ -5,7 +5,8 @@
 
 
 {% block content %}
-<h4 style="color:red;">{{request.args.get('mess', '')}}</h4>
+
+
 
 <div id="img">
 
@@ -49,9 +50,10 @@
                 <div id="classesNames">
 
                         {% for r in results %}
-
+                        
                         <div class="class">
-                            <input type="radio" name="classn" value="{{r[1]}}">{{r[1]}}</input>
+                            
+                            <input type="radio" name="classn" value="{{r[1]}}" required="required" >{{r[1]}}</input>
                         </div>
 
 
@@ -60,7 +62,8 @@
 
                     <br/>
 
-                        <button type="submit" id="" style="color:black;"><a>Delete Class </a></button>&nbsp; &nbsp;
+                        <button type="submit" name="submit" style="color:black;width:50px;" value="Delete"><a>Delete  </a></button>&nbsp; &nbsp;
+                        <button type="submit" name="submit" style="color:black;width:50px;" value="Edit"><a>Edit  </a></button>&nbsp; &nbsp;
  </form>
                     </fieldset>
                
@@ -77,11 +80,7 @@
 
 
 
-<script>
-    function reloadFunction() {
-        location.reload();
-    }
-</script>
+
 
 
 
