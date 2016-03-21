@@ -174,6 +174,49 @@ def manageQuestion():
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanelMQ.html')    
 
+#multiple coice answer
+@app.route('/answer', methods=['GET','POST'])
+def answerQuestion():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    # check current class (cc)
+    cc = 1234
+    #fix below
+    query = "SELECT question_id FROM answers WHERE class_code = %s AND status = 1" % (cc) 
+    #query = "SELECT question_id FROM answers WHERE status = 1 AND class_code = 1234"
+    cur.execute(query)
+    results = cur.fetchall()
+
+    query = "SELECT * FROM question WHERE question_id = %s" % (results[0][0])
+    cur.execute(query)
+    results2 = cur.fetchall()
+    print results2
+    
+    query = "SELECT * FROM multiple_choice_question WHERE question_id = %s" % (results[0][0])
+    cur.execute(query)
+    results3 = cur.fetchall()
+    print results3
+    
+    results4 = []
+    resultsTemp = results3
+    del resultsTemp[0][6]
+    for result in resultsTemp[0]:
+        if result != None:
+            results4.append(result)
+    del results4[0]
+    print results4        
+    
+    if request.method == 'POST':
+        if request.form['submit']:
+            print 'I did it!'
+            print request.form['option']
+            #make this (below) student home page
+            return render_template('index.html')
+    
+    #add to database from here
+    
+    return render_template('answer.html', answers=results2, answers2=results4)
 
 
 if __name__ == '__main__':
