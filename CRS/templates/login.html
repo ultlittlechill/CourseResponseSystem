@@ -3,35 +3,54 @@
 {% block content %}
 
 
-   <center style=" position: absolute;left: 700px; bottom:25%  ">    
+<div id="left">
+        <img src="static/images/h.png" alt=""  />
 
-        <form method="post" action="{{url_for('login')}}">
+</div>
+<div id="right">
+   
+   <form method="post" action="{{url_for('login')}}">
         
 				<fieldset class="sf" style="color:White; border-width:3px; "  >
             <legend ><h1>Login</h1></legend>
 				<p> 
-					<label for="username" class="uname" data-icon="u" >  Email:  </label>
+				<span style=" padding-right:25px;">
+					<label for="username" class="l">  Email:  </label>
+					</span>
 					<input id="username" name="username" style="color:black;"  required="required" type="text" placeholder="mymail@mail.com"/>
 				</p>
 				<p> 
-					<label for="password" class="youpasswd" data-icon="p">  password: </label>
+				<span style=" padding-right:0px;">
+					<label for="password" class="l" >  password: </label>
+					</span>
 					<input id="password" name="password" style="color:black;" required="required" type="password" placeholder="eg. X8df!90EO" /> 
 				</p>
-					<button type="submit" style="color:black;"><a> Login </a></button>
+					<button type="submit" style="Scolor:black;"><a> Login </a></button>
 				</fieldset>
-			</form>
-		</center> 
-<p style=" position: absolute;left: 200px; bottom:40;  ">
-        <img src="static/images/h.png" alt=""  />
-	</div><!--close site_content-->  	
-  
-  </div><!--close main-->
+			</form> 
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       
       
 
 
-</p>
+
  
 
 {% endblock %}

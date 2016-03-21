@@ -1,53 +1,97 @@
 
 {% extends "layout.html" %}
 
+
+
+
 {% block content %}
 
-<section style=" position: absolute;left:29%;   ">
+
+
+<div id="img">
+
+        <img src="static/images/class.png" alt="" width="450" height="309.6" />
+
+    </div>
+
+<div id="right">
+
     
-     
-  
 
-        <form method="post" style="float:center;" >
-        
-				<fieldset class="sf" style="color:White; border-width:3px; "  >
+    <div id="mngc">
+
+        <fieldset class="sf" style="color:black; border-width:3px; "  >
             <legend ><h1>Manage Classes</h1></legend>
-            
-            
-            <fieldset class="sf" style="color:White; border-width:3px;float:left "  >
-            <legend >Create Class</legend>
-				<p> 
-					<label for="class" class="class" data-icon="u" >  Class Name:  </label>
-					<input id="classname" name="classname" style="color:black;"  required="required" type="text" placeholder="Enter your class"/>
-					
-				</p>Class Code:
-				<input id="classnumber" name="classnumber" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
-				<p>
-					<input type="submit" value="Create Class" alert('Hello world!') style="color:black;"/> 
-					</p>
-				</fieldset>
-				
-				<fieldset class="sf" style="color:White; border-width:3px;float:left "  >
-            <legend >Classes</legend>
-            
-            {% for r in results %}
-                <span>
-               <p>
-               <input type="radio">{{r[1]}}
-               </p>
-              </<span>
-            {% endfor %}
-            
-            </fieldset>
-				
-				
-				
-				</fieldset>
-			</form>
-		
+
+            <div id="creatClass">
+                <form method="post" action="{{url_for('controlPanel')}}" >
+                    <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
+
+                        <legend ><h4>Create Class</h4></legend>
+                        <p> 
+                            <label for="class" class="class" data-icon="u" >  Class Name:  </label>
+                            <input id="classname" name="classname" style="color:black;"  required="required" type="text" placeholder="Enter your class"/>
+
+                        </p>Class Code:
+                        <input id="classnumber" name="classnumber" style="color:black;"  required="required" type="text" placeholder="Enter your class code"/>
+                        <p>
+                            <button type="submit" style="color:black;"><a>Create Class </a></button>
+                        </p>
+                    </fieldset>
+                </form>
+
+            </div>
+            <div id="classes">
+                
+                    <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
+                         <legend ><h4>Classes</h4></legend>
+                        <form method="post" action="{{url_for('delete')}}">
+                       
+                <div id="classesNames">
+
+                        {% for r in results %}
+                        
+                        <div class="class">
+                            
+                            <input type="radio" name="classn" value="{{r[1]}}" required="required" >{{r[1]}}</input>
+                        </div>
+
+
+                        {% endfor %}
+              </div>
+
+                    <br/>
+
+                        <button type="submit" name="submit" style="color:black;width:50px;" value="Delete"><a>Delete  </a></button>&nbsp; &nbsp;
+                        <button type="submit" name="submit" style="color:black;width:50px;" value="Edit"><a>Edit  </a></button>&nbsp; &nbsp;
+ </form>
+                    </fieldset>
+               
+            </div>	
+
+
+        </fieldset>
+    </div>
+</div>
 
 
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}

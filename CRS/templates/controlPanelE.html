@@ -1,0 +1,65 @@
+
+{% extends "layout.html" %}
+
+
+
+
+{% block content %}
+<h4 style="color:red;">{{request.args.get('mess', '')}}</h4>
+
+<div id="img">
+
+        <img src="static/images/class.png" alt="" width="450" height="309.6" />
+
+    </div>
+
+<div id="right">
+    <div id="mngc">
+<fieldset class="sf" style="color:black; border-width:3px;float:left "  >
+                         <legend ><h4>Edit Class</h4></legend>
+                         
+                         
+    <form method="post" action="{{url_for('edit')}}">
+        <table>
+            
+                <td></td>
+            
+        
+        
+        
+        <tr>
+            <td>Class Name:</td>
+        <td><input type="text"  name="classn" value="{{request.args.get('name', '')}}"/></td>
+        </tr>
+        <tr>
+        <td><label for="class" class="class" data-icon="u" >  Class Code:  </label></td>
+        <td><input type="text"  name="classcode" style="display: none;visibility: hidden;" value="{{request.args.get('code', '')}}"/>{{request.args.get('code', '')}}</td>
+        </tr>
+
+       
+        </table>
+        <button type="submit" name="submit" style="color:black;" value="Save"><a>Save  </a></button>&nbsp; &nbsp;
+        <button type="submit" name="submit" style="color:black;" value="Cancel"><a>Cancel  </a></button>&nbsp; &nbsp;
+    </form>
+</fieldset>
+   </div> 
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
