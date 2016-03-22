@@ -53,7 +53,7 @@
                         
                         <div class="class">
                             
-                            <input type="radio" name="classn" value="{{r[1]}}" required="required" >{{r[1]}}</input>
+                            <input  type="radio"  name="classn" value="{{r[1]}}" required="required" ><span  onmouseover="showspan('{{r[1]}}')" onmouseout="hidespan('{{r[1]}}')"  id="classname">{{r[1]}}</span><span id="{{r[1]}}" style="display: none; padding-left:5px">{{r[0]}}</span> </input>
                         </div>
 
 
@@ -81,7 +81,36 @@
 
 
 
+<script >
 
+function showspan(v){
+    document.getElementById(v).style.display='inline'
+
+}
+
+function hidespan(v){
+    document.getElementById(v).style.display='none'
+
+}
+  /*  
+    var pee = '';
+$('#classcodenmber').mouseover(function(){
+
+              pee =  setInterval(function() {
+ // Do something every 5 seconds
+                    
+                    
+                    $("#showclassn").css('visibility', 'visible');
+                    $("#showclassn").css('display', 'inline');
+                   
+});
+});
+    $('#classcodenmber').mouseout(function() {
+        $("#showclassn").css('visibility', 'hidden');
+        $("#showclassn").css('display', 'none');
+});*/
+    
+</script>
 
 
 

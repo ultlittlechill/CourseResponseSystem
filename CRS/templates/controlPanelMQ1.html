@@ -1,0 +1,204 @@
+
+{% extends "layout.html" %}
+
+{% block jss %}
+
+
+        
+        
+        <script>
+function myFunction() {
+    
+    if(document.getElementById('short').checked ) {
+       document.getElementById("short").checked = true;
+  document.getElementById("demo").innerHTML = "<textarea rows='4' cols='50' id='shortAnswer' name='shortAnswer' style='color:black;' placeholder='write your answer here' required='required' type=]textfield' ></textarea><br>";
+    
+        
+    }else if(document.getElementById('mutiple').checked) {
+        
+    
+  document.getElementById("demo").innerHTML ="A:<textarea rows='2' cols='60' placeholder='write option A'  name='answerA' required='required' value=''></textarea><input type='radio' value='A' name='correct' style='color:black;''  required='required' />  <br> B:<textarea rows='2' cols='60' required='required' placeholder='write option B'   name='answerB' value=''></textarea><input type='radio' value='B'  name='correct' style='color:black;''  required='required' /><br> C:<textarea  rows='2' cols='60' required='required' placeholder='write option C' name='answerC' value=''></textarea><input type='radio' value='C'  name='correct' style='color:black;''  required='required' /><br> D:<textarea rows='2' cols='60'  required='required' placeholder='write option D'  name='answerD' value=''></textarea><input type='radio' value='D' name='correct' style='color:black;''  required='required' /><br>E:<textarea rows='2' cols='60'  required='required' placeholder='write option E'  name='answerE' value=''></textarea><input type='radio' value='E' name='correct' style='color:black;''  required='required' />  <br>"
+    document.getElementById("mutiple").checked = true;
+    
+    
+}else if(document.getElementById('maps').checked) {
+   document.getElementById("maps").checked = true;
+  document.getElementById("demo").innerHTML ="<input type='file' onchange='readURL(this);'   id='image' name='image' /><br/><img id='blah' src='#' alt='your image' /> <a ><button type='button'id='start' onclick='loadDoc();openW()'>  Start Hiliting  </button></a>"
+  
+}
+
+    
+    //var x = document.getElementById("myRadio").checked;
+    
+}
+
+
+/*function checkAll() {
+    
+    if(document.getElementById('checkall').checked ) {
+       document.getElementsByName("classn").checked = true;}
+}*/
+
+
+function loopForm(form) {
+    for (var i = 0; i < form.elements.length; i++ ) {
+        if (form.elements[i].type == 'checkbox') {
+             if(document.getElementById('checkall').checked ) {
+       
+                 form.elements[i].checked = true
+             }
+             else
+             form.elements[i].checked = false
+             
+            
+        }
+        
+        
+    }
+}
+
+
+
+
+function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+
+
+function openW() {
+    window.open("/controlPanelImage", "_blank", "toolbar=no, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+}
+
+
+    
+
+</script>
+        
+
+{% endblock %}
+{% block content %}
+
+
+
+<div id="img">
+
+        <img src="static/images/class.png" alt="" width="450" height="309.6" />
+
+    </div>
+
+<div id="right">
+<style>
+
+            
+            #canvas {
+                border:1px solid blue;
+              
+
+
+            }
+        </style>
+    
+
+    <div id="mngc">
+
+        <fieldset class="sf" style="color:black; border-width:3px; "  >
+            <legend ><h1>Manage Questions</h1></legend>
+
+            <div id="creatClass">
+                <form method="post" name="thisForm" action="{{url_for('manageQuestion')}}" enctype=multipart/form-data >
+                    <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
+
+                        <legend ><h4>Create Question</h4></legend>
+                        <p> 
+                            <label for="class" class="class" data-icon="u" >  Question:  </label>
+                            <textarea rows="2" cols="60" id="question" name="question" style="color:black;"  required="required" type="textfield" placeholder="Write your question here"></textarea>
+                                
+                            
+
+                        </p>
+                        <label for="class" class="class" data-icon="u"  >  Question Type:  </label>
+                        <input type="radio" id="short" name="type" onclick="myFunction()" style="color:black;" value="Short Answer" required="required" />Short Answer
+                        <input type="radio" id="mutiple" name="type"onclick="myFunction()" style="color:black;" value="Multiple Choices" required="required" />Multiple Choices
+                        <input type="radio" id="maps" name="type" onclick="myFunction()"style="color:black;" value="Map" required="required" />Map
+                        
+                        <p>
+                            <span id="demo">
+                                
+                            <div style=" display: none"> <fieldset><legend>Image Preview</legend><img id="mapImg" onload="hi()" onclick=""   class="" usemap="#map"/><map id='map' name='map'></map></fieldset></div>
+                                
+                               
+                                </span>
+                            
+                            
+                            
+                        </p>
+                        
+                        <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
+                         <legend ><h6>Who Can See This Question</h6></legend>
+                        <div id="classesNames">
+                            <div class="class">
+                            <input type="checkbox" id="checkall" name="classn" value="All" onclick="loopForm(document.thisForm);"  >All</input>
+                            </div>
+                        {% for r in results %}
+                        
+                        <div class="class">
+                            
+                            <input type="checkbox" name="classn" value="{{r[1]}}" >{{r[1]}}</input>
+                        </div>
+
+
+                        {% endfor %}
+                        </div>
+                        </fieldset>
+                        <br><br><br><br><br><br>
+                        <div style="float:left; padding-top:5px">
+                            
+                            <label>  Comment:  </label>
+                            <textarea rows="2" cols="45" id="comment" name="comment" style="color:black;"  type="textfield" placeholder="Write your comment here"></textarea>
+                        </div>
+                        
+                        <div>
+                        <button type="submit" style="color:black;"><a>Create Question </a></button>
+                        </div>
+                    </fieldset>
+                </form>
+
+            </div>
+	
+
+
+        </fieldset>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

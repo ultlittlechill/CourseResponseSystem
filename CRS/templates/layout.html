@@ -6,8 +6,57 @@
   <meta name="format-detection" content="telephone=no"/>
   <link rel="stylesheet" href="static/css/style.css">
   
+  <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="static/js/jquery.maphilight.js"></script>
+ 
+  {% block jss %}{% endblock %}
   
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script type="text/javascript" >
+    function loadDoc() {
+   // alert("hello");
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+       var pic = xhttp.responseText;
+       localStorage.setItem("qimg",pic);
+       //alert(localStorage.getItem("qimg"));
+       //var can=document.getElementById('canvas');
+       //var imageSrc=document.getElementById('mapImg');
+       //can.style.backgroundImage= "url('./static/images/uploads/"+pic+"')";
+       //can.style.backgroundRepeat="no-repeat";
+      // alert("im here");
+       document.getElementById("mapImg").src = "static/images/uploads/"+pic;
+       //document.getElementById("mapImage").src = "static/images/uploads/"+pic;
+                     var imgT = new Image();
+imgT.onload = function() {
+  
+ var w=this.width;
+ var h=this.height;
+ localStorage.setItem("w",w);
+ localStorage.setItem("h",h);
+}
+imgT.src = "static/images/uploads/"+pic;
+       
+    }
+  };
+  
+  var fileS=document.getElementById('image');
+  
+  var file=fileS.files[0];
+ // alert("send"+file.name);
+  var data= new FormData();
+  data.append("image",file,file.name);
+  data.append("type","Map");
+  //alert("send");
+  xhttp.open("POST", "controlPanelMQL", true);
+  xhttp.send(data);
+}
+    
+  </script>
+  
+  
+  
+  
   
   
   
@@ -20,6 +69,9 @@
     $( document ).ready(function() {
     $("#infor").delay(3000).fadeOut("slow");
 });
+
+
+
   </script>
     
   
@@ -41,7 +93,7 @@
         
           
           <li><a  href="/controlPanel">Manage Classes</a></li>
-          <li><a href="/controlPanelMQ">Manage Questions</a></li>
+          <li><a href="/controlPanelMQ1">Manage Questions</a></li>
           <li><a href="/logout">Logout </a></li>
           
         </ul>

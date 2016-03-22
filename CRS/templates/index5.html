@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="static/js/jquery.maphilight.js"></script>
+        
+        <script>
+            $(function () {
+//alert("hi");
+                var canvas = document.getElementById("canvas");
+                var ctx = canvas.getContext("2d");
+                var canvasOffset = $("#canvas").offset();
+                var offsetX = canvasOffset.left;
+                var offsetY = canvasOffset.top;
+                var startX;
+                var startY;
+                var isDown = false;
+                var coord;
+                var shapeArr = new Array();
+                var xend;
+                var yend;
+                var isMoved = false;
+
+                function drawOval(x, y) {
+
+                    var x1 = x - startX;//Math.abs(x-startX);
+                    var y1 = y - startY;//Math.abs(y-startY);
+                    if (x1 < 0 || y1 < 0)
+                        return;
+
+                    xend = x1;
+                    yend = y1;
+                    drawAll();
+
+
+                    ctx.beginPath();
+
+                    ctx.rect(startX, startY, x1, y1);
+                    coord = startX + "," + startY + "," + (x1 + startX) + "," + (y1 + startY);
+
+                    ctx.closePath();
+                    ctx.stroke();
+                    ctx.fillStyle = "rgba(0,255,0,0.25)";
+                    ctx.fill();
+
+
+                }
+                function drawShape(v)
+                {
+                    ctx.beginPath();
+
+                    ctx.rect(v.xs, v.ys, v.xe, v.ye);
+                    // coord=startX+","+startY+","+(x1+startX)+","+(y1+startY);
+
+                    ctx.closePath();
+                    ctx.stroke();
+                    ctx.fillStyle = "rgba(0,255,0,0.25)";
+                    ctx.fill();
+                }
+                function isIntresct(r1, r2) {
+                    var r1xe = r1.xe + r1.xs;
+                    var r1ye = r1.ye + r1.ys;
+
+                    var r2xe = r2.xe + r2.xs;
+                    var r2ye = r2.ye + r2.ys;
+
+                    var aLeftOfB = r1xe < r2.xs;
+                    var aRightOfB = r1.xs > r2xe;
+                    var aAboveB = r1.ys > r2ye;
+                    var aBelowB = r1ye < r2.ys;
+                    //alert(aLeftOfB+": "+r1.xe + " --- " + r2.xs);
+                    return !(aLeftOfB || aRightOfB || aAboveB || aBelowB);
+                }
+                function handleMouseDown(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    startX = parseInt(e.clientX - offsetX);
+                    startY = parseInt(e.clientY - offsetY);
+                    isDown = true;
+                }
+
+                function handleMouseUp(e) {
+                    if (!isDown) {
+                        return;
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    isDown = false;
+                    var map = document.getElementById("map");
+                    // var sty = "\"fillColor\":\"00ff00\",\"alwaysOn\":true";
+
+                    var shape = {xs: startX, ys: startY, xe: xend, ye: yend};
+                    for (i = 0; i < shapeArr.length; i++)
+                    {
+
+                        var s = shapeArr[i];
+                        if (isIntresct(s, shape))
+                        {
+                            //alert("intersect");
+                            drawAll();
+                            return;
+                        }
+                    }
+                    shapeArr.push(shape);
+
+
+                    map.innerHTML += " <area id='area' coords='" + coord + "'  shape=\"rect\"  alt=\"h\" />";
+                    hi();
+                    // alert(map.innerHTML);
+                }
+                function drawAll()
+                {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    for (i = 0; i < shapeArr.length; i++)
+                    {
+                        drawShape(shapeArr[i]);
+                    }
+                }
+                function handleMouseOut(e) {
+                    if (!isDown) {
+                        return;
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    isDown = false;
+                    isMoved = false;
+                }
+
+                function handleMouseMove(e) {
+                    if (!isDown) {
+                        return;
+                    }
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                    mouseX = parseInt(e.clientX - offsetX);
+                    mouseY = parseInt(e.clientY - offsetY);
+                    isMoved = true;
+                    drawOval(mouseX, mouseY);
+
+                }
+                function handleMouseClick(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    isMoved = false;
+                   // alert("hi");
+                    mouseX = parseInt(e.clientX - offsetX);
+                    mouseY = parseInt(e.clientY - offsetY);
+                    var shape = {xs: mouseX, ys: mouseY, xe: mouseX + 1, ye: mouseY + 1};
+                   // ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    var index = -1;
+                    for (i = 0; i < shapeArr.length; i++)
+                    {
+
+                        if (isIntresct(shapeArr[i], shape))
+                        {
+                            index = i;
+                           // continue;
+                           break;
+                        }
+                        //drawShape(shapeArr[i]);
+                    }
+                    if (index !== -1)
+                    {
+                        shapeArr.splice(index, 1);
+                        drawAll();
+                    }
+                    //drawOval(mouseX, mouseY);
+                }
+
+                
+                $("#canvas").mousedown(function (e) {
+                    handleMouseDown(e);
+                });
+                $("#canvas").mousemove(function (e) {
+                    handleMouseMove(e);
+                });
+                $("#canvas").mouseup(function (e) {
+                    handleMouseUp(e);
+                });
+                $("#canvas").mouseout(function (e) {
+                    handleMouseOut(e);
+                });
+                $("#canvas").dblclick(function (e) {
+                    handleMouseClick(e);
+                });
+            }); // end $(function(){});
+        </script>
+
+    </head>
+    <body >
+        <style>
+
+           
+            #canvas {
+                border:1px solid blue;
+                background-image: url('static/images/map.png');
+                background-repeat: no-repeat;
+
+
+            }
+        </style>
+
+        <script>
+            function hi() {
+
+                $('img[usemap]').maphilight();
+                //alert("hiiiiiiii");
+            }
+
+
+        </script>
+        <canvas id="canvas" width="400" height="400">
+
+
+        </canvas>
+        <br/><br/>
+        <img onload="hi()" onclick=""  src="static/images/map.png" class="" usemap="#map"/>
+        <map id='map' name='map'>
+
+<area shape="rect" coords="46,30,225,62" />
+</map>
+
+        <div>TODO write content</div>
+    </body>
+</html>

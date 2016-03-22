@@ -4,16 +4,22 @@ import psycopg2.extras
 import os
 import sys  
 from flask import Flask, session, redirect, url_for, escape, request, render_template
+from werkzeug import secure_filename
 reload(sys)
 
-
+UPLOAD_FOLDER = './static/images/uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key= os.urandom(24).encode('hex')
 
 currentUser = ''
-
-
+filename=''
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+           
 def connectToDB():
     connectionString='dbname=crs user=postgres password=maher123 host=localhost'
     print connectionString
@@ -22,7 +28,7 @@ def connectToDB():
     except:
         print ("Can't connect to database")
 
-@app.route('/')
+@app.route('/',methods=['GET', 'POST'])
 def mainIndex():
     conn=connectToDB()
     cur= conn.cursor(cursor_factory=psycopg2.extras.DictCursor) 
@@ -163,18 +169,115 @@ def edit():
     return render_template('controlPanelE.html')
 
 
-@app.route('/controlPanelMQ', methods=['GET', 'POST'])
+@app.route('/controlPanelMQ1', methods=['GET', 'POST'])
 def manageQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if 'username' in session:
+        query = "select * from class " 
+        cur.execute(query)
+        results = cur.fetchall()
         if request.method == 'POST':
-            return render_template('controlPanelMQ.html')
+            question = request.form['question']
+            comment=request.form['comment']
+            print"we inter post"
+            
+            
+            try:
+                    cur.execute("""INSERT INTO question
+                    VALUES (DEFAULT,1,%s, %s,NULL);""",[question,comment] )
+                    #cur.execute = ("select question_id from question where question_id=%s ",[question])
+                    #QuestionId=cur.fetchall()
+            except:
+                    print "could not add the question!!"
+                    mess="could not add the question!!"
+                    notification="error"
+                    conn.rollback()
+            conn.commit() 
+            cur.execute("select count(question_id) from question")
+            qid = cur.fetchone()
+            print qid[0]
+            
+            
+            if('type' in request.form and (request.form['type']=="Multiple Choices")):
+                print"we inter type"
+                questiontype= request.form['type']
+                answerA=request.form['answerA']
+                answerB=request.form['answerB']
+                answerC=request.form['answerC']
+                answerD=request.form['answerD']
+                answerE=request.form['answerE']
+                print answerA,answerB,answerC,answerD,answerE
+                if('correct' in request.form):
+                        print"we inter correct"
+                        correctAnswer=request.form['correct']
+                        print correctAnswer
+                
+                try:  
+                        
+                        cur.execute("""INSERT INTO multiple_choice_question 
+                        VALUES(%s,%s,%s,%s,%s,%s,%s);""",[qid[0],answerA,answerB,answerC,answerD,answerE,correctAnswer] )
+                        
+                        
+                        
+                        
+                except:
+                        print (cur.mogrify("""INSERT INTO multiple_choice_question 
+                        VALUES(%s,%s,%s,%s,%s,%s,%s);""",[qid[0],answerA,answerB,answerC,answerD,answerE,correctAnswer] ))
+                        print "could not add the multiple_choice_question!!"
+                        conn.rollback()
+                conn.commit()  
+                return render_template('controlPanelMQ1.html')
+            
+            elif('type' in request.form and (request.form['type']=="Short Answer")):
+                
+                try:
+                    shortanswer=request.form['shortAnswer']
+                    cur.execute("""INSERT INTO short_answer
+                        VALUES(%s,%s);""",[qid[0],shortanswer] )
+                except:
+                    print "could not add the short answer!!"
+                    print (cur.mogrify("""INSERT INTO short_answer
+                        VALUES(%s,%s);""",[qid[0],shortanswer] ))
+                    conn.rollback()
+                conn.commit()
+            
+            
+                    
+                #resp.status_code = 204
+            return render_template('controlPanelMQ1.html')
     if 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('controlPanelMQ.html')    
+    return render_template('controlPanelMQ1.html',results=results)    
 
-
+@app.route('/controlPanelMQL', methods=['GET', 'POST'])
+def loadimage():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if 'username' in session:
+        if request.method == 'POST':
+            cur.execute("select count(question_id) from question")
+            qid = cur.fetchone()
+            print qid[0]
+            if('type' in request.form and (request.form['type']=="Map")):
+                print "Tring to upload the image"
+                file =request.files['image']
+                print "Tring to upload the image"
+                if file and allowed_file(file.filename):
+                    print " the image is here now"
+                    filename = secure_filename(file.filename)
+                    i=filename.find('.')
+                    filename=str(qid[0]+1)+filename[i:]
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename) )
+                    
+                    return filename
+ 
+@app.route('/controlPanelImage', methods=['GET', 'POST']) 
+def hiliteimage():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    print filename+" Hi"
+    return  render_template('controlPanelImage.html',filename=filename)
 
 if __name__ == '__main__':
     app.debug=True
