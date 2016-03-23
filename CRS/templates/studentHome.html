@@ -6,4 +6,22 @@
         <img src="static/images/class.png" alt="" width="450" height="309.6" />
 </div>
 
+<div id="right">
+    <div id="mngc">
+
+        <fieldset class="sf" style="color:black; border-width:3px; "  >
+            <legend ><h1>Previous Questions</h1></legend>
+                <form method="post" action="{{url_for('sampleQuestion1')}}">
+                        <button type="submit" name="submit" style="color:black;" value="1/22/2016"><a>1/22/2016</a></button>&nbsp; &nbsp;
+                </form>
+                <form method="post" action="{{url_for('sampleQuestion2')}}">
+                    <button type="submit" name="submit" style="color:black;" value="2/11/2016"><a>2/11/2016</a></button>&nbsp; &nbsp;
+                </form>
+                <form method="post" action="{{url_for('sampleQuestion3')}}">
+                    <button type="submit" name="submit" style="color:black;" value="2/26/2016"><a>2/26/2016</a></button>&nbsp; &nbsp;
+                </form>
+        </fieldset>
+    </div>
+</div>
+
 {% endblock %}

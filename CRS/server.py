@@ -60,24 +60,21 @@ def studentLogin():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     #reusing the username variable to store the class code
     #it is a number, but it is stored as a string type
-    if 'username' in session:
-        username_session = escape(session['username']).capitalize()
+    if 'class_code' in session:
         return redirect(url_for('studentHome'))
     if request.method == 'POST':
-            username = request.form['class_code']
-            currentUser = username
-            cur.execute("select * from class WHERE class_code = %s", (int(username),))
+            class_code = request.form['class_code']
+            cur.execute("select * from class WHERE class_code = %s", (int(class_code),))
             r = cur.fetchall()
             if r:
-                session['username'] = request.form['class_code']
+                session['class_code'] = request.form['class_code']
                 return redirect(url_for('studentHome'))
-         #return redirect(url_for('mainIndex',user=currentUser,c=ch))
     return render_template('studentLogin.html')
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-        
+    session.pop('class_code',None)
     return redirect(url_for('mainIndex'))
 
 
@@ -199,7 +196,7 @@ def manageQuestion():
 
 @app.route('/studentHome', methods=['GET', 'POST'])
 def studentHome():
-    if 'username' not in session:  
+    if 'class_code' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('studentHome.html')
 
@@ -246,7 +243,19 @@ def answerQuestion():
     #add to database from here
     
     return render_template('answer.html', answers=results2, answers2=results4)
-
+    
+#placeholder question details pages
+@app.route('/sampleQuestion1', methods=['GET','POST'])
+def sampleQuestion1():
+    return render_template('sample_question_1.html')
+    
+@app.route('/sampleQuestion2', methods=['GET','POST'])
+def sampleQuestion2():
+    return render_template('sample_question_2.html')
+    
+@app.route('/sampleQuestion3', methods=['GET','POST'])
+def sampleQuestion3():
+    return render_template('sample_question_3.html')
 
 if __name__ == '__main__':
     app.debug=True
