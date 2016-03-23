@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<div id="left">
+        <img src="static/images/h.png" alt=""  />
+
+</div>
+<div id="right">
+   
+   <form method="post" action="{{url_for('studentLogin')}}">
+        
+				<fieldset class="sf" style="color:White; border-width:3px; "  >
+            <legend ><h1>Login</h1></legend>
+				<p> 
+				<span style=" padding-right:25px;">
+					<label for="class_code" class="l">  Class Code:  </label>
+					</span>
+					<input id="class_code" name="class_code" style="color:black;"  required="required" type="text" placeholder="1234"/>
+				</p>
+					<button type="submit" style="Scolor:black;"><a> Login </a></button>
+				</fieldset>
+			</form> 
+</div>
+
+{% endblock %}
+
+
+
+

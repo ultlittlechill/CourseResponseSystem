@@ -43,6 +43,7 @@ def login():
         
             pw = request.form['password']
             print pw
+            # Vulnerable to sql injection? Might need to change to cur.mogrify("query",(parameters))
             query = "select * from administrator WHERE email = '%s' AND password = '%s'" % (username, pw)
             print query
             cur.execute(query)
@@ -53,11 +54,30 @@ def login():
          #return redirect(url_for('mainIndex',user=currentUser,c=ch))
     return render_template('login.html')
 
+@app.route('/studentLogin', methods=['GET', 'POST'])
+def studentLogin():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    #reusing the username variable to store the class code
+    #it is a number, but it is stored as a string type
+    if 'class_code' in session:
+        return redirect(url_for('studentHome'))
+    if request.method == 'POST':
+            class_code = request.form['class_code']
+            cur.execute("select * from class WHERE class_code = %s", (int(class_code),))
+            r = cur.fetchall()
+            if r:
+                session['class_code'] = request.form['class_code']
+                return redirect(url_for('studentHome'))
+    return render_template('studentLogin.html')
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-        
+    session.pop('class_code',None)
     return redirect(url_for('mainIndex'))
+
+
 
 @app.route('/controlPanel', methods=['GET', 'POST'])
 def controlPanel():
@@ -79,7 +99,7 @@ def controlPanel():
                 conn.commit()
             except:
                 
-                mess="The class code is already existed!"
+                mess="This class code already exists!"
                 notification="error"
                 return  redirect(url_for('controlPanel',mess=mess,notification=notification))
       
@@ -88,7 +108,7 @@ def controlPanel():
             print query
             cur.execute(query)
             results = cur.fetchall()
-            mess="Your calss has been created"
+            mess="Your class has been created"
             notification="success"
             return  redirect(url_for('controlPanel',mess=mess,notification=notification))    
     if 'username' not in session:  
@@ -174,6 +194,12 @@ def manageQuestion():
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanelMQ.html')    
 
+@app.route('/studentHome', methods=['GET', 'POST'])
+def studentHome():
+    if 'class_code' not in session:  
+        return  redirect(url_for('mainIndex'))
+    return render_template('studentHome.html')
+
 #multiple coice answer
 @app.route('/answer', methods=['GET','POST'])
 def answerQuestion():
@@ -254,6 +280,18 @@ def answerQuestion2():
     
     return render_template('answer2.html', answers=results2, qImage=qImage)
     
+#placeholder question details pages
+@app.route('/sampleQuestion1', methods=['GET','POST'])
+def sampleQuestion1():
+    return render_template('sample_question_1.html')
+    
+@app.route('/sampleQuestion2', methods=['GET','POST'])
+def sampleQuestion2():
+    return render_template('sample_question_2.html')
+    
+@app.route('/sampleQuestion3', methods=['GET','POST'])
+def sampleQuestion3():
+    return render_template('sample_question_3.html')
 
 if __name__ == '__main__':
     app.debug=True

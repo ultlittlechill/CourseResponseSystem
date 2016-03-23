@@ -36,7 +36,7 @@
   
   <div id="menubar">
     <ul id="nav">
-    {% if 'username' not in session  %}<li><a  href="/">Home</a></li>{% endif %}
+    {% if 'username' not in session and 'class_code' not in session %}<li><a  href="/">Home</a></li>{% endif %}
     {% if 'username' in session %}
         
           
@@ -59,6 +59,21 @@
 
 
 </div> 
+  
+  {% endif %}
+  
+  {% if 'class_code' in session %}
+        
+          
+          <li><a href="/studentHome">Previous Questions</a></li>
+          <li><a href="/answerQuestion">Answer Question</a></li>
+          <li><a href="/logout">Logout</a></li>
+          
+        </ul>
+      
+      
+    
+  </div>
   
   {% endif %}
   </div>
