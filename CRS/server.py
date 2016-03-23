@@ -238,7 +238,7 @@ def answerQuestion():
             #print 'I did it!'
             #print request.form['option']
             #make this (below) student home page
-            return render_template('index.html')
+            return render_template('studentHome.html')
     
     #add to database from here
     
@@ -271,7 +271,7 @@ def answerQuestion2():
             #print 'I did it!'
             print request.form['answer']
             #make this (below) student home page
-            return render_template('index.html')
+            return render_template('studentHome.html')
     
     #add to database from here
     
