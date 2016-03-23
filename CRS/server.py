@@ -238,7 +238,7 @@ def answerQuestion():
             #print 'I did it!'
             #print request.form['option']
             #make this (below) student home page
-            return render_template('studentHome.html')
+            return redirect(url_for('studentHome'))
     
     #add to database from here
     
@@ -271,7 +271,7 @@ def answerQuestion2():
             #print 'I did it!'
             print request.form['answer']
             #make this (below) student home page
-            return render_template('studentHome.html')
+            return redirect(url_for('studentHome'))
     
     #add to database from here
     
@@ -283,15 +283,15 @@ def answerQuestion2():
 #placeholder question details pages
 @app.route('/sampleQuestion1', methods=['GET','POST'])
 def sampleQuestion1():
-    return render_template('sample_question_1.html')
+    return render_template('sampleQuestion1.html')
     
 @app.route('/sampleQuestion2', methods=['GET','POST'])
 def sampleQuestion2():
-    return render_template('sample_question_2.html')
+    return render_template('sampleQuestion2.html')
     
 @app.route('/sampleQuestion3', methods=['GET','POST'])
 def sampleQuestion3():
-    return render_template('sample_question_3.html')
+    return render_template('sampleQuestion3.html')
 
 if __name__ == '__main__':
     app.debug=True

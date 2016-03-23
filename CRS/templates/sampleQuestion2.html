@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% if 'username' not in session %}
+
+<div id="mngc">
+    <fieldset class="sf" style="color:Black; border-width:3px; "  >
+    <table>
+        <tr>
+            <td>
+                <h3>Question:</h3>
+            </td>
+            <td>
+                Why was the Great Wall of China built?
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Comments:</h3>
+            </td>
+            <td>
+                The Great Wall of China was built to protect the northern borders of China from various nomadic groups.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Visualized Results:</h3>
+            </td>
+            <td>
+                <img src="static/images/word.png" alt=""  />
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+ {% endif %} 
+        
+{% endblock %}
