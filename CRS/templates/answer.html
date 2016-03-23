@@ -1,0 +1,51 @@
+
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>QUESTION</h1>
+
+<tr>{{answers[0][2]}}</tr>
+<br><br>
+
+<!--<div id="img">
+
+    <img src="questionImages/math2.png" alt="" width="450" height="309.6" />
+
+</div>-->
+
+
+<!-- <div id="thing">
+<script type="text/javascript">
+var qImage = document.getElementsByName("qImage").value;
+var img = document.createElement("img");
+    img.src = qImage;
+    img.width = 450;
+    img.height = 310;
+    img.alt = "";
+
+    // This next line will just add it to the <body> tag
+    document.div.appendChild(img);
+</script>
+</div>-->
+
+<!--<script type="text/javascript"> 
+var answer = document.getElementsByName("answers")[0].value;
+document.write("<b>answer</b>");
+if (answer[0][1] == 1) 
+{
+document.write("<b>Hi Boy</b>"); 
+} 
+</script>-->
+<form method = 'POST' action = '/answer'>
+    {% for a in answers2 %}
+        <input type="radio" name="option" value="{{a}}" required="required" >{{a}}</input>
+        <br>
+    {% endfor %}
+
+    <br>
+    <br>
+
+    <button type="submit" name="submit" style="color:black;width:80px;" value="Submit"><a>Submit  </a></button>&nbsp; &nbsp;
+</form>
+{% endblock %}

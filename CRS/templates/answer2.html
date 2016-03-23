@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>QUESTION</h1>
+
+<tr>{{answers[0][2]}}</tr>
+<br><br>
+
+<!-- find a way to put image here -->
+<form method = 'POST' action = '/answer2'>
+    <input id="answer" name="answer" style="color:black;"  required="required" type="text" placeholder="Enter your answer"/>
+    <br>
+    <br>
+    <button type="submit" name="submit" style="color:black;width:80px;" value="Submit"><a>Submit  </a></button>&nbsp; &nbsp;
+    
+</form>
+{% endblock %}
