@@ -191,12 +191,12 @@ def answerQuestion():
     query = "SELECT * FROM question WHERE question_id = %s" % (results[0][0])
     cur.execute(query)
     results2 = cur.fetchall()
-    print results2
+    #print results2
     
     query = "SELECT * FROM multiple_choice_question WHERE question_id = %s" % (results[0][0])
     cur.execute(query)
     results3 = cur.fetchall()
-    print results3
+    #print results3
     
     results4 = []
     resultsTemp = results3
@@ -205,19 +205,55 @@ def answerQuestion():
         if result != None:
             results4.append(result)
     del results4[0]
-    print results4        
+    #print results4        
     
     if request.method == 'POST':
         if request.form['submit']:
-            print 'I did it!'
-            print request.form['option']
+            #print 'I did it!'
+            #print request.form['option']
             #make this (below) student home page
             return render_template('index.html')
     
     #add to database from here
     
-    return render_template('answer.html', answers=results2, answers2=results4)
+    qImage = "questionImages/math2.png"
+    #qImage = None
+    
+    return render_template('answer.html', answers=results2, answers2=results4, qImage=qImage)
 
+#short answer question
+@app.route('/answer2', methods=['GET','POST'])
+def answerQuestion2():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    cc = 1111
+    
+    query = "SELECT question_id FROM answers WHERE class_code = %s AND status = 1" % (cc) 
+    #query = "SELECT question_id FROM answers WHERE status = 1 AND class_code = 1234"
+    cur.execute(query)
+    results = cur.fetchall()
+    #print results
+
+    query = "SELECT * FROM question WHERE question_id = %s" % (results[0][0])
+    cur.execute(query)
+    results2 = cur.fetchall()
+    #print results2
+    
+    if request.method == 'POST':
+        if request.form['submit']:
+            #print 'I did it!'
+            print request.form['answer']
+            #make this (below) student home page
+            return render_template('index.html')
+    
+    #add to database from here
+    
+    qImage = "questionImages/math2.png"
+    #qImage = None
+    
+    return render_template('answer2.html', answers=results2, qImage=qImage)
+    
 
 if __name__ == '__main__':
     app.debug=True

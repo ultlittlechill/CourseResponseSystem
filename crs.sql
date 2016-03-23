@@ -15,6 +15,7 @@ CREATE TABLE class (
     PRIMARY KEY (class_code));
 
 INSERT INTO class VALUES (1234, 'History');
+INSERT INTO class VALUES (1111, 'Geography');
 
 CREATE TABLE question (
     question_id serial,
@@ -55,3 +56,4 @@ CREATE TABLE answers (
     
 INSERT INTO answers VALUES('2016-1-18', 2, 1234, 1, 'bloop');
 INSERT INTO answers VALUES(null, 1, 1234, 1, null);
+INSERT INTO answers VALUES(null, 1, 1111, 2, null);
