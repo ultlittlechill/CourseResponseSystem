@@ -21,6 +21,7 @@
 <fieldset class="sf" style="color:black; border-width:3px; height:90%; "  >
                          <legend ><h4>Main Menu</h4></legend>
                          <div>
+                             <form method="post" action ="{{url_for('menu')}}">
                              <div class="class">
                              <select>
                              {% for r in results %}
@@ -33,15 +34,15 @@
                             <!--<form method = 'POST' action = '/menu'>-->
                                 <select>
                                  {% for i in res %}
-
+                                      <input type="text" name="q" value="{{i[0]}}" style="display:none">
                                       <option  name="question" value="{{i[0]}}">{{i[0]}} </option>
 
                                 {% endfor %}
                                  </select>
                              </div>
-                             <form method = 'POST' action = '/menu'>
-                                     <input onclick="change()" type="button" value="Display" id="display"/>
-                                     <input onclick="" type="button" style="display:none" value="Show Result" id="ShowR"/>
+                             
+                                     <input  type="submit" name="display" value="Display" id="display"/>
+                                     <input onclick="" type="submit" style="display:none" value="Show Result" id="ShowR"/>
                                      <input onclick="" type="button" style="display:none" value="Share Result" id="shareR"/>
                              </form>
                          </div>

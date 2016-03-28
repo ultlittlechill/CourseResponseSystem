@@ -389,7 +389,7 @@ def answerQuestion2():
 def menu():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    print filename+" Hi"
+    print " Hi"
     if 'username' in session:
         query = "select * from class " 
         cur.execute(query)
@@ -397,22 +397,24 @@ def menu():
         query = "select question from question " 
         cur.execute(query)
         res = cur.fetchall()
+        question=''
         print res
+        print "We here?"
         
         if request.method == 'POST':
-            print request.form['question']
             print "why don't you work?"
+            print request.form['q']
             #on button press
-            if request.form['Display']:
+            if('display' in request.form):
                 buicom = "CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id));"
                 cur.execute(buicom)
                 # find class code and question code, then change question state to be 1
                 print 'heyo'
             
-        return  render_template('menu.html', results=results,res=res)
+        return  render_template('menu.html', results=results,res=res,question=question)
     if 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
-    return  render_template('menu.html')
+    return  render_template('menu.html',question=question)
 
 
 
