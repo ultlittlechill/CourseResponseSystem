@@ -29,16 +29,17 @@
 
                         {% endfor %}
                              </select>
-                             
-                            <select>
-                             {% for i in res %}
+                            
+                            <!--<form method = 'POST' action = '/menu'>-->
+                                <select>
+                                 {% for i in res %}
 
                                       <option  name="question" value="{{i[0]}}">{{i[0]}} </option>
 
-                        {% endfor %}
-                             </select>
+                                {% endfor %}
+                                 </select>
                              </div>
-                             <form>
+                             <form method = 'POST' action = '/menu'>
                                      <input onclick="change()" type="button" value="Display" id="display"/>
                                      <input onclick="" type="button" style="display:none" value="Show Result" id="ShowR"/>
                                      <input onclick="" type="button" style="display:none" value="Share Result" id="shareR"/>
