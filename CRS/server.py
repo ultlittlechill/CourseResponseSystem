@@ -398,6 +398,17 @@ def menu():
         cur.execute(query)
         res = cur.fetchall()
         print res
+        
+        if request.method == 'POST':
+            print request.form['question']
+            print "why don't you work?"
+            #on button press
+            if request.form['Display']:
+                buicom = "CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id));"
+                cur.execute(buicom)
+                # find class code and question code, then change question state to be 1
+                print 'heyo'
+            
         return  render_template('menu.html', results=results,res=res)
     if 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
