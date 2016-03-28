@@ -242,7 +242,7 @@ def manageQuestion():
                         print "could not add the multiple_choice_question!!"
                         conn.rollback()
                 conn.commit()  
-                return render_template('controlPanelMQ1.html')
+                return render_template('controlPanelMQ1.html',results=results,res=res)
             
             elif('type' in request.form and (request.form['type']=="Short Answer")):
                 
