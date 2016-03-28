@@ -21,7 +21,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
            
 def connectToDB():
-    connectionString='dbname=crs user=postgres password=root host=localhost'
+    connectionString='dbname=crs1 user=postgres password=maher123 host=localhost'
     print connectionString
     try:
         return psycopg2.connect(connectionString)
@@ -303,7 +303,7 @@ def hiliteimage():
 
 
 #multiple coice answer
-@app.route('/answer', methods=['GET','POST'])
+@app.route('/answerQuestion', methods=['GET','POST'])
 def answerQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)

@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS crs;
-CREATE DATABASE crs;
-\c crs
+CREATE DATABASE crs1;
+\c crs1
 
 CREATE TABLE administrator (
     email varchar(35),
