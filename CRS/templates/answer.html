@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layout.html" %}
 {% block menuBar %}
 
@@ -13,11 +14,21 @@
         <legend ><h4> Question</h4></legend>
 
 
+
+<h1>QUESTION</h1>
+
+
 <tr>{{answers[0][2]}}</tr>
 <br><br>
 
 <!--<div id="img">
+<<<<<<< HEAD
     <img src="questionImages/math2.png" alt="" width="450" height="309.6" />
+=======
+
+    <img src="questionImages/math2.png" alt="" width="450" height="309.6" />
+
+>>>>>>> 33cd526bc76be6aae979f318cc886962d3e2fdc9
 </div>-->
 
 
@@ -29,6 +40,7 @@ var img = document.createElement("img");
     img.width = 450;
     img.height = 310;
     img.alt = "";
+
     // This next line will just add it to the <body> tag
     document.div.appendChild(img);
 </script>
@@ -42,7 +54,10 @@ if (answer[0][1] == 1)
 document.write("<b>Hi Boy</b>"); 
 } 
 </script>-->
+
 <form method = 'POST' action = '/answerQuestion'>
+
+
     {% for a in answers2 %}
         <input type="radio" name="option" value="{{a}}" required="required" >{{a}}</input>
         <br>
@@ -53,6 +68,7 @@ document.write("<b>Hi Boy</b>");
 
     <button type="submit" name="submit" style="color:black;width:80px;" value="Submit"><a>Submit  </a></button>&nbsp; &nbsp;
 </form>
+
 
 </fieldset>
 </div>

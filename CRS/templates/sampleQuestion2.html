@@ -2,14 +2,15 @@
 
 
 {% block menuBar %}
+{% if 'username'  in session %}
 
 <li><a href="/studentHome">Previous Questions</a></li>
 <li><a href="/answerQuestion">Answer Question</a></li>
  <li><a href="/logout">Logout</a></li>
+ {% endif %}
 {% endblock %}
 
 {% block content %}
-{% if 'username'  in session %}
 
 <div id="mngc">
     <fieldset class="sf" style="color:Black; border-width:3px; "  >
@@ -36,13 +37,13 @@
             </td>
             <td>
                 <img src="static/images/word.png" alt=""  />
+
                 
+
             </td>
         </tr>
     </table>
 </div>
 
-
- {% endif %} 
         
 {% endblock %}

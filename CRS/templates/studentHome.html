@@ -1,10 +1,12 @@
 {% extends "layout.html" %}
+
 {% block menuBar %}
 
 <li><a href="/studentHome">Previous Questions</a></li>
 <li><a href="/answerQuestion">Answer Question</a></li>
  <li><a href="/logout">Logout</a></li>
 {% endblock %}
+
 
 {% block content %}
 
@@ -14,9 +16,11 @@
 
 <div id="right">
     <div id="mngc">
+
         <div style="width:400px; height:250px;">
         <fieldset class="sf" style="color:black; border-width:3px; height:90%;"  >
             <legend ><h4>Previous Questions</h4></legend>
+
                 <form method="post" action="{{url_for('sampleQuestion1')}}">
                         <button type="submit" name="submit" style="color:black;" value="1/22/2016"><a>1/22/2016</a></button>&nbsp; &nbsp;
                 </form>
@@ -27,11 +31,13 @@
                     <button type="submit" name="submit" style="color:black;" value="2/26/2016"><a>2/26/2016</a></button>&nbsp; &nbsp;
                 </form>
         </fieldset>
+
         </div>
     </div>
 </div>
 
 {% endblock %}
+
 
 
 

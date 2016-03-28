@@ -1,12 +1,17 @@
 {% extends "layout.html" %}
+
 {% block menuBar %}
 
 <li><a  href="/menu">Home</a></li>
-{% endblock %}
-{% block content %}
 <div id="infor" >
 {% if request.args.get('notification', '') =='codeError' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
 </div>
+{% endblock %}
+
+
+{% block content %}
+
+
 <div id="left">
         <img src="static/images/h.png" alt=""  />
 
@@ -28,4 +33,10 @@
 			</form> 
 </div>
 
+
 {% endblock %}
+
+
+
+
+
