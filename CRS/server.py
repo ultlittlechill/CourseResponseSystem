@@ -403,7 +403,9 @@ def menu():
         
         if request.method == 'POST':
             print "why don't you work?"
-            print request.form['q']
+            #print request.form['q']
+            select = request.form.get('question')
+            print select
             #on button press
             if('display' in request.form):
                 buicom = "CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id));"

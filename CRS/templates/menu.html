@@ -32,16 +32,14 @@
                              </select>
                             
                             <!--<form method = 'POST' action = '/menu'>-->
-                                <select>
+                                <select name="question" class="selectpicker form-control">
                                  {% for i in res %}
                                       
-                                      <option  name="question" value="{{i[0]}}">{{i[0]}} </option>
+                                      <option   value="{{i[0]}}">{{i[0]}} </option>
                                       
                                 {% endfor %}
                                  </select>
-                                 {% for i in res %}
-                                 <input type="text" name="q" value="{{i[0]}}" style="visibility:hidden; display:none;">
-                                 {% endfor %}
+                                 
                              </div>
                              
                                      <input  type="submit" name="display" value="Display" id="display"/>
