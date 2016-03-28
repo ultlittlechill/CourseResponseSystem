@@ -49,13 +49,18 @@ def login():
         
             pw = request.form['password']
             print pw
-            query = "select * from administrator WHERE email = '%s' AND password = '%s'" % (username, pw)
-            print query
-            cur.execute(query)
+            try:
+                query = "select * from administrator WHERE email = '%s' AND password = '%s'" % (username, pw)
+                print query
+                cur.execute(query)
+            except:
+                notification="password"
+                mess="The email or password you inputted is incorrect!"
+                return redirect(url_for('login',mess=mess,notification=notification))
             r=cur.fetchall()
             if r:
                 session['username'] = request.form['username']
-                return redirect(url_for('controlPanel'))
+                return redirect(url_for('menu'))
          #return redirect(url_for('mainIndex',user=currentUser,c=ch))
     return render_template('login.html')
 
@@ -85,7 +90,7 @@ def controlPanel():
                 conn.commit()
             except:
                 
-                mess="The class code is already existed!"
+                mess="This class code already exists!"
                 notification="error"
                 return  redirect(url_for('controlPanel',mess=mess,notification=notification))
       
@@ -94,7 +99,7 @@ def controlPanel():
             print query
             cur.execute(query)
             results = cur.fetchall()
-            mess="Your calss has been created"
+            mess="Your class has been created"
             notification="success"
             return  redirect(url_for('controlPanel',mess=mess,notification=notification))    
     if 'username' not in session:  
@@ -174,6 +179,10 @@ def manageQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if 'username' in session:
+        query = "select question from question " 
+        cur.execute(query)
+        res = cur.fetchall()
+        
         query = "select * from class " 
         cur.execute(query)
         results = cur.fetchall()
@@ -248,7 +257,7 @@ def manageQuestion():
             return render_template('controlPanelMQ1.html')
     if 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('controlPanelMQ1.html',results=results)    
+    return render_template('controlPanelMQ1.html',results=results,res=res)    
 
 @app.route('/controlPanelMQL', methods=['GET', 'POST'])
 def loadimage():
@@ -277,8 +286,170 @@ def hiliteimage():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     print filename+" Hi"
-    return  render_template('controlPanelImage.html',filename=filename)
+    if 'username' in session:
+        return  render_template('controlPanelImage.html')
+    if 'username' not in session:  
+        return  redirect(url_for('mainIndex')) 
+    return  render_template('controlPanelImage.html')
+    
 
+
+@app.route('/menu', methods=['GET', 'POST']) 
+def menu():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    print filename+" Hi"
+    if 'username' in session:
+        query = "select * from class " 
+        cur.execute(query)
+        results = cur.fetchall()
+        query = "select question from question " 
+        cur.execute(query)
+        res = cur.fetchall()
+        print res
+        return  render_template('menu.html', results=results,res=res)
+    if 'username' not in session:  
+        return  redirect(url_for('mainIndex')) 
+    return  render_template('menu.html')
+
+
+
+@app.route('/studentLogin', methods=['GET', 'POST'])
+def studentLogin():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    #reusing the username variable to store the class code
+    #it is a number, but it is stored as a string type
+    if 'username' in session:
+         username_session = escape(session['username']).capitalize()
+         return redirect(url_for('studentHome'))
+    if request.method == 'POST':
+            username = request.form['class_code']
+            currentUser = username
+            try:
+                cur.execute("select * from class WHERE class_code = %s", (username,))
+                r = cur.fetchall()
+            except:
+                notification="codeError"
+                mess="The class code you inputted is incorrect!"
+                return redirect(url_for('studentLogin',mess=mess,notification=notification))
+            if r:
+                session['username'] = request.form['class_code']
+                return redirect(url_for('studentHome'))
+            else:
+                notification="codeError"
+                mess="The class code you inputted is incorrect!"
+                return redirect(url_for('studentLogin',mess=mess,notification=notification))
+         #return redirect(url_for('mainIndex',user=currentUser,c=ch))
+    
+    return render_template('studentLogin.html')
+
+
+
+
+@app.route('/answerQuestion', methods=['GET','POST'])
+def answerQuestion():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    # check current class (cc)
+    cc = 1234
+    #fix below
+    query = "SELECT question_id FROM answers WHERE class_code = %s AND status = 1" % (cc) 
+    #query = "SELECT question_id FROM answers WHERE status = 1 AND class_code = 1234"
+    cur.execute(query)
+    results = cur.fetchall()
+
+    query = "SELECT * FROM question WHERE question_id = %s" % (results[0][0])
+    cur.execute(query)
+    results2 = cur.fetchall()
+    #print results2
+    
+    query = "SELECT * FROM multiple_choice_question WHERE question_id = %s" % (results[0][0])
+    cur.execute(query)
+    results3 = cur.fetchall()
+    #print results3
+    
+    results4 = []
+    resultsTemp = results3
+    del resultsTemp[0][6]
+    for result in resultsTemp[0]:
+        if result != None:
+            results4.append(result)
+    del results4[0]
+    #print results4        
+    
+    if request.method == 'POST':
+        if request.form['submit']:
+            #print 'I did it!'
+            #print request.form['option']
+            #make this (below) student home page
+            return render_template('studentHome.html')
+    
+    #add to database from here
+    
+    qImage = "questionImages/math2.png"
+    #qImage = None
+    
+    return render_template('answer.html', answers=results2, answers2=results4, qImage=qImage)
+
+#short answer question
+@app.route('/answer2', methods=['GET','POST'])
+def answerQuestion2():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    cc = 1111
+    
+    query = "SELECT question_id FROM answers WHERE class_code = %s AND status = 1" % (cc) 
+    #query = "SELECT question_id FROM answers WHERE status = 1 AND class_code = 1234"
+    cur.execute(query)
+    results = cur.fetchall()
+    #print results
+
+    query = "SELECT * FROM question WHERE question_id = %s" % (results[0][0])
+    cur.execute(query)
+    results2 = cur.fetchall()
+    #print results2
+    
+    if request.method == 'POST':
+        if request.form['submit']:
+            #print 'I did it!'
+            print request.form['answer']
+            #make this (below) student home page
+            return render_template('studentHome.html')
+    
+    #add to database from here
+    
+    qImage = "questionImages/math2.png"
+    #qImage = None
+    
+    return render_template('answer2.html', answers=results2, qImage=qImage)
+    
+
+
+
+
+
+
+@app.route('/studentHome', methods=['GET', 'POST'])
+def studentHome():
+     if 'username' not in session:  
+        return  redirect(url_for('mainIndex'))
+     return render_template('studentHome.html')
+
+#placeholder question details pages
+@app.route('/sampleQuestion1', methods=['GET','POST'])
+def sampleQuestion1():
+    return render_template('sampleQuestion1.html')
+    
+@app.route('/sampleQuestion2', methods=['GET','POST'])
+def sampleQuestion2():
+    return render_template('sampleQuestion2.html')
+    
+@app.route('/sampleQuestion3', methods=['GET','POST'])
+def sampleQuestion3():
+    return render_template('sampleQuestion3.html')
 if __name__ == '__main__':
     app.debug=True
     app.run(host='0.0.0.0', port=8080)

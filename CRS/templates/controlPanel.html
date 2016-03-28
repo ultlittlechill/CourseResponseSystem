@@ -1,8 +1,13 @@
 
 {% extends "layout.html" %}
 
+{% block menuBar %}
 
-
+<li><a  href="/menu">Administer Question</a></li>
+<li><a  href="/controlPanel">Manage Classes</a></li>
+<li><a href="/controlPanelMQ1">Manage Questions</a></li>
+<li><a href="/logout">Logout </a></li>
+{% endblock %}
 
 {% block content %}
 
@@ -45,7 +50,7 @@
                 
                     <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
                          <legend ><h4>Classes</h4></legend>
-                        <form method="post" action="{{url_for('delete')}}">
+                        <form method="post" id="dform" onsubmit="" action="{{url_for('delete')}}">
                        
                 <div id="classesNames">
 
@@ -62,8 +67,8 @@
 
                     <br/>
 
-                        <button type="submit" name="submit" style="color:black;width:50px;" value="Delete"><a>Delete  </a></button>&nbsp; &nbsp;
-                        <button type="submit" name="submit" style="color:black;width:50px;" value="Edit"><a>Edit  </a></button>&nbsp; &nbsp;
+                        <button type="submit" onclick="deleteConfirm()"name="submit" style="color:black;width:50px;" value="Delete"><a>Delete  </a></button>&nbsp; &nbsp;
+                        <button type="submit"  name="submit" style="color:black;width:50px;" value="Edit"><a>Edit  </a></button>&nbsp; &nbsp;
  </form>
                     </fieldset>
                
@@ -115,7 +120,12 @@ $('#classcodenmber').mouseover(function(){
 
 
 
-
+<script>
+function deleteConfirm() {
+    document.getElementById("dform").onsubmit= function (){return confirm('Do you really want to delete this class?');}
+    
+}
+</script>
 
 
 

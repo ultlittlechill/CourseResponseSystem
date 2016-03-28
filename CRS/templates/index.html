@@ -1,6 +1,12 @@
 
 {% extends "layout.html" %}
+{% block menuBar %}
 
+<li><a  href="/menu">Administer Question</a></li>
+<li><a  href="/controlPanel">Manage Classes</a></li>
+<li><a href="/controlPanelMQ1">Manage Questions</a></li>
+<li><a href="/logout">Logout </a></li>
+{% endblock %}
 {% block content %}
 {% if 'username' not in session %}
 
@@ -19,8 +25,8 @@
     
     </td>
     <td>
-    <form>
-    <button type="submit" style="width:100px;height:50px;color:black;"><a >Student Login </a></button>
+    <form action="/studentLogin" style="float:left;">
+    <button type="submit" style="width:100px;height:50px;color:black;"><a>Student Login </a></button>
     </form>
     </td>
 

@@ -35,7 +35,7 @@ CREATE TABLE multiple_choice_question (
     option_c text,
     option_d text,
     option_e text,
-    correct_answer int);
+    correct_answer varchar(1));
     
 INSERT INTO multiple_choice_question VALUES (1, '3', '7', '4', null, null, 3);
 

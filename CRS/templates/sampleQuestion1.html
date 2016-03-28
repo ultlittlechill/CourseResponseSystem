@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+
+{% block menuBar %}
+
+<li><a href="/studentHome">Previous Questions</a></li>
+<li><a href="/answerQuestion">Answer Question</a></li>
+ <li><a href="/logout">Logout</a></li>
+{% endblock %}
+
+{% block content %}
+{% if 'username' in session %}
+
+<div id="mngc">
+    <fieldset class="sf" style="color:Black; border-width:3px; "  >
+    <table>
+        <tr>
+            <td>
+                <h3>Question:</h3>
+            </td>
+            <td>
+                Can the Great Wall of China be seen from space?
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Answers:</h3>
+            </td>
+            <td>
+                A: Yes
+                <br>
+                B: No
+                <br>
+                C: Only from low orbit
+                <br>
+                D: Only during spring
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Comments:</h3>
+            </td>
+            <td>
+                The correct answer is B. The Great Wall of China is big, but it cannot actually be seen from space.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Visualized Results:</h3>
+            </td>
+            <td>
+                <img src="static/images/bar.png" alt=""  />
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+ {% endif %} 
+        
+{% endblock %}

@@ -90,11 +90,8 @@ imgT.src = "static/images/uploads/"+pic;
     <ul id="nav">
     {% if 'username' not in session  %}<li><a  href="/">Home</a></li>{% endif %}
     {% if 'username' in session %}
-        
+          {% block menuBar %}{% endblock %}
           
-          <li><a  href="/controlPanel">Manage Classes</a></li>
-          <li><a href="/controlPanelMQ1">Manage Questions</a></li>
-          <li><a href="/logout">Logout </a></li>
           
         </ul>
       
@@ -103,7 +100,7 @@ imgT.src = "static/images/uploads/"+pic;
   </div>
   
   <div id="infor" >
-
+{% if request.args.get('notification', '') =='codeError' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
 {% if request.args.get('notification', '') =='error' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
 {% if request.args.get('notification', '') =='success' %}<div class="alert-box success"><span>success: </span>{{request.args.get('mess', '')}}</div>{% endif %}
 {% if request.args.get('notification', '') =='warning' %}<div class="alert-box warning"><span>warning: </span>{{request.args.get('mess', '')}}</div>{% endif %}

@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% block menuBar %}
+
+<li><a  href="/menu">Administer Question</a></li>
+<li><a  href="/controlPanel">Manage Classes</a></li>
+<li><a href="/controlPanelMQ1">Manage Questions</a></li>
+<li><a href="/logout">Logout </a></li>
+{% endblock %}
+{% block content %}
+
+
+<div id="left">
+        <img src="static/images/setting.png" alt=""  width="400" height="400" />
+
+</div>
+<div id="right">
+    <div id="mngc">
+        
+        <div style="width:400px; height:200px;">
+        
+<fieldset class="sf" style="color:black; border-width:3px; height:90%; "  >
+                         <legend ><h4>Main Menu</h4></legend>
+                         <div>
+                             <div class="class">
+                             <select>
+                             {% for r in results %}
+
+                                      <option name="classn" value="{{r[1]}}">{{r[1]}}</option>
+
+                        {% endfor %}
+                             </select>
+                             
+                            <select>
+                             {% for i in res %}
+
+                                      <option  name="question" value="{{i[0]}}">{{i[0]}} </option>
+
+                        {% endfor %}
+                             </select>
+                             </div>
+                             <form>
+                                     <input onclick="change()" type="button" value="Display" id="display"/>
+                                     <input onclick="" type="button" style="display:none" value="Show Result" id="ShowR"/>
+                                     <input onclick="" type="button" style="display:none" value="Share Result" id="shareR"/>
+                             </form>
+                         </div>
+                         
+                        
+    
+</fieldset>
+</div>
+
+   </div> 
+</div>
+<script type="text/javascript" >
+    
+    function change() 
+{
+    if (document.getElementById("display").value=="Display") {
+        document.getElementById("display").value= "Undisplay";
+        document.getElementById("ShowR").style.display="none";
+        document.getElementById("shareR").style.display="none";
+        
+        
+    }
+    else {
+    document.getElementById("display").value= "Display";
+    document.getElementById('ShowR').style.display='inline';
+        document.getElementById("shareR").style.display="inline";
+        
+    }
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      
+
+
+
+ 
+
+{% endblock %}
+
+
+
+

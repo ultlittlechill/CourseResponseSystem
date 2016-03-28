@@ -1,6 +1,12 @@
 
 {% extends "layout.html" %}
+{% block menuBar %}
 
+<li><a  href="/menu">Administer Question</a></li>
+<li><a  href="/controlPanel">Manage Classes</a></li>
+<li><a href="/controlPanelMQ1">Manage Questions</a></li>
+<li><a href="/logout">Logout </a></li>
+{% endblock %}
 {% block jss %}
 
 
@@ -23,7 +29,7 @@ function myFunction() {
     
 }else if(document.getElementById('maps').checked) {
    document.getElementById("maps").checked = true;
-  document.getElementById("demo").innerHTML ="<input type='file' onchange='readURL(this);'   id='image' name='image' /><br/><img id='blah' src='#' alt='your image' /> <a ><button type='button'id='start' onclick='loadDoc();openW()'>  Start Hiliting  </button></a>"
+  document.getElementById("demo").innerHTML ="<input type='file' onchange='readURL(this);'   id='image' name='image' /><br/><img id='blah' src='#' alt='your image' /> <a ><button type='button'id='start' onclick='loadDoc();openW()'>  Processing Image </button></a>"
   
 }
 
@@ -84,6 +90,9 @@ function openW() {
     
 
 </script>
+
+
+
         
 
 {% endblock %}
@@ -143,7 +152,7 @@ function openW() {
                             
                             
                         </p>
-                        
+                        <!--
                         <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
                          <legend ><h6>Who Can See This Question</h6></legend>
                         <div id="classesNames">
@@ -161,7 +170,7 @@ function openW() {
                         {% endfor %}
                         </div>
                         </fieldset>
-                        <br><br><br><br><br><br>
+                        <br><br><br><br><br><br>!-->
                         <div style="float:left; padding-top:5px">
                             
                             <label>  Comment:  </label>
@@ -171,11 +180,33 @@ function openW() {
                         <div>
                         <button type="submit" style="color:black;"><a>Create Question </a></button>
                         </div>
-                    </fieldset>
-                </form>
+                        </form>
 
             </div>
-	
+            
+            <fieldset class="sf" style="color:black; border-width:3px; "  >
+                         <legend ><h4>Modify Question </h4></legend>
+                         </select>
+                             
+                            <select>
+                             {% for i in res %}
+
+                                      <option  name="question" value="{{i[0]}}">{{i[0]}} </option>
+
+                        {% endfor %}
+                             </select>
+                             <form id="dformq" onsubmit="">
+                             <div>
+                         <button type="submit" style="color:black;"><a>Modify Question </a></button>        
+                        <button type="submit" onclick="deleteConfirmq()" style="color:black;"><a>Delete Question </a></button>
+                        </div>
+                        </form>
+                
+	                    </fieldset>
+            
+                    </fieldset>
+                    
+                    
 
 
         </fieldset>
@@ -192,7 +223,12 @@ function openW() {
 
 
 
-
+<script>
+function deleteConfirmq() {
+    document.getElementById("dformq").onsubmit= function (){return confirm('Do you really want to delete this Question?');}
+    
+}
+</script>
 
 
 

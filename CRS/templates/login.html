@@ -1,7 +1,10 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div id="infor" >
+{% if request.args.get('notification', '') =='password' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
 
+</div>
 
 <div id="left">
         <img src="static/images/h.png" alt=""  />
