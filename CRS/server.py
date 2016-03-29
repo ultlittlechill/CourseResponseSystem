@@ -6,9 +6,14 @@ import sys
 import datetime
 from flask import Flask, session, redirect, url_for, escape, request, render_template
 from werkzeug import secure_filename
+
+
+
 #from pytagcloud import create_tag_image, make_tags
 #from pytagcloud.lang.counter import get_tag_counts
 #import webbrowser
+
+
 reload(sys)
 
 UPLOAD_FOLDER = './static/images/uploads'
@@ -452,6 +457,8 @@ def answerQuestion2():
 def menu():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    display=False
+    curC=''
     print " Hi"
     if 'username' in session:
         query = "select * from class " 
@@ -464,6 +471,7 @@ def menu():
         print res
         #print "We here?"
         
+        
         if request.method == 'POST':
             #print "why don't you work?"
             #print request.form['q']
@@ -474,7 +482,7 @@ def menu():
             #on button press
             if('display' in request.form ):
               
-              
+                display=True
                 print "it should be here"
                 #buicom = 'CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id))'
                 #cur.execute(buicom)
@@ -500,16 +508,19 @@ def menu():
                     query = "UPDATE answers SET status = 'undisplay' WHERE status = 'display';" 
                     cur.execute(query)
                     conn.commit()
+                    display=False
             elif 'showr' in request.form:
                 print "showing results"
                 answerstext=""
                 for a in answersList:
                     answerstext+=a
+                display=False
+                
                 
                 #tags = make_tags(get_tag_counts(answerstext), maxsize=80)
-                #create_tag_image(tags, 'cloud_large.png', size=(900, 600), fontname='Lobster')
+                #create_tag_image(tags, 'static/images/cloud_large.png', size=(300, 600), fontname='Lobster')
                 #webbrowser.open('cloud_large.png')
-        return  render_template('menu.html', results=results,res=res,question=question)
+        return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question)
     if 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
     return  render_template('menu.html',question=question)
