@@ -42,8 +42,9 @@
                                  
                              </div>
                              
-                                     <input  type="submit" name="display" value="Display" id="display"/>
-                                     <input onclick="" type="submit" style="display:none" value="Show Result" id="ShowR"/>
+                                     <input onclick="" type="submit" name="display" value="Display" id="display"/>
+                                     <input onclick="" type="submit" style="display" name="hide" value="Hide" id="hide"/>
+                                     <input onclick="" type="submit" style="" value="Show Result" name="showr" id="ShowR"/>
                                      <input onclick="" type="button" style="display:none" value="Share Result" id="shareR"/>
                              </form>
                          </div>
@@ -60,22 +61,22 @@
     function change() 
 {
     if (document.getElementById("display").value=="Display") {
-        document.getElementById("display").value= "Undisplay";
-        document.getElementById("ShowR").style.display="none";
-        document.getElementById("shareR").style.display="none";
+        document.getElementById("hide").style.display="inline";
+        document.getElementById("display").style.display="inline";
+        //document.getElementById("display").value= "Hide";
+        //document.getElementById("ShowR").style.display="none";
+        //document.getElementById("shareR").style.display="none";
         
         
     }
     else {
     document.getElementById("display").value= "Display";
-    document.getElementById('ShowR').style.display='inline';
-        document.getElementById("shareR").style.display="inline";
+    //document.getElementById('ShowR').style.display='inline';
+        //document.getElementById("shareR").style.display="inline";
         
     }
 }
 </script>
-
-
 
 
 

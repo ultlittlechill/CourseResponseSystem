@@ -6,6 +6,9 @@ import sys
 import datetime
 from flask import Flask, session, redirect, url_for, escape, request, render_template
 from werkzeug import secure_filename
+#from pytagcloud import create_tag_image, make_tags
+#from pytagcloud.lang.counter import get_tag_counts
+#import webbrowser
 reload(sys)
 
 UPLOAD_FOLDER = './static/images/uploads'
@@ -17,6 +20,7 @@ app.secret_key= os.urandom(24).encode('hex')
 
 currentQuestion = ''
 currentClass = ''
+answersList=[]
 
 
 def allowed_file(filename):
@@ -312,6 +316,7 @@ def answerQuestion():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     results4 = []
     shortanswer=''
+    results2=''
     if 'username' in session:
         
         print currentClass + currentQuestion + "This is it"
@@ -351,9 +356,10 @@ def answerQuestion():
             
         print results2
         if request.method == 'POST':
-            query = "UPDATE answers SET status = 'undisplay' WHERE status = 'display';" 
-            cur.execute(query)
-            conn.commit()
+            if 'shortAnswer' in request.form:
+                answersList.append(request.form['shortAnswer'])
+                print answersList
+            
             
             return redirect(url_for('studentHome'))
         
@@ -466,7 +472,10 @@ def menu():
             curC = request.form.get('className')
             print curC
             #on button press
-            if('display' in request.form):
+            if('display' in request.form ):
+              
+              
+                print "it should be here"
                 #buicom = 'CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id))'
                 #cur.execute(buicom)
                 # find class code and question code, then change question state to be 1
@@ -487,7 +496,19 @@ def menu():
                 cmd4 = 'SELECT * FROM answers where class_code = %s and question_id = %s' % (ccChange, qcChange)
                 cur.execute(cmd4)
                 #print cur.fetchall();
-            
+            elif  'hide' in request.form :
+                    query = "UPDATE answers SET status = 'undisplay' WHERE status = 'display';" 
+                    cur.execute(query)
+                    conn.commit()
+            elif 'showr' in request.form:
+                print "showing results"
+                answerstext=""
+                for a in answersList:
+                    answerstext+=a
+                
+                #tags = make_tags(get_tag_counts(answerstext), maxsize=80)
+                #create_tag_image(tags, 'cloud_large.png', size=(900, 600), fontname='Lobster')
+                #webbrowser.open('cloud_large.png')
         return  render_template('menu.html', results=results,res=res,question=question)
     if 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
