@@ -23,7 +23,7 @@
                          <div>
                              <form method="post" action ="{{url_for('menu')}}">
                              <div class="class">
-                             <select>
+                             <select name = "className" class = "selectpicker form-control">
                              {% for r in results %}
 
                                       <option name="classn" value="{{r[1]}}">{{r[1]}}</option>

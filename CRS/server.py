@@ -2,7 +2,8 @@ import hashlib
 import psycopg2
 import psycopg2.extras
 import os
-import sys  
+import sys 
+import datetime
 from flask import Flask, session, redirect, url_for, escape, request, render_template
 from werkzeug import secure_filename
 reload(sys)
@@ -21,7 +22,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
            
 def connectToDB():
-    connectionString='dbname=crs1 user=postgres password=maher123 host=localhost'
+    connectionString='dbname=crs user=postgres password=root host=localhost'
     print connectionString
     try:
         return psycopg2.connect(connectionString)
@@ -309,25 +310,28 @@ def answerQuestion():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # check current class (cc)
-    cc = 1234
+    cc = session['username']
+    print cc
     #fix below
     query = "SELECT question_id FROM answers WHERE class_code = %s AND status = 1" % (cc) 
     #query = "SELECT question_id FROM answers WHERE status = 1 AND class_code = 1234"
     cur.execute(query)
     results = cur.fetchall()
+    print results
 
     query = "SELECT * FROM question WHERE question_id = %s" % (results[0][0])
     cur.execute(query)
     results2 = cur.fetchall()
-    #print results2
+    print results2
     
     query = "SELECT * FROM multiple_choice_question WHERE question_id = %s" % (results[0][0])
     cur.execute(query)
     results3 = cur.fetchall()
-    #print results3
+    print results3
     
     results4 = []
     resultsTemp = results3
+    #print resultsTemp
     del resultsTemp[0][6]
     for result in resultsTemp[0]:
         if result != None:
@@ -399,19 +403,35 @@ def menu():
         res = cur.fetchall()
         question=''
         print res
-        print "We here?"
+        #print "We here?"
         
         if request.method == 'POST':
-            print "why don't you work?"
+            #print "why don't you work?"
             #print request.form['q']
-            select = request.form.get('question')
-            print select
+            curQ = request.form.get('question')
+            print curQ
+            curC = request.form.get('className')
+            print curC
             #on button press
             if('display' in request.form):
-                buicom = "CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id));"
-                cur.execute(buicom)
+                #buicom = 'CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id))'
+                #cur.execute(buicom)
                 # find class code and question code, then change question state to be 1
-                print 'heyo'
+                cmd1 = "SELECT class_code FROM class WHERE class_name = '%s'" % curC
+                #print cmd1
+                cur.execute(cmd1)
+                ccChange = cur.fetchall()[0][0]
+                #print ccChange
+                cmd2 = "SELECT question_id FROM question WHERE question = '%s'" % curQ
+                cur.execute(cmd2)
+                qcChange = cur.fetchall()[0][0]
+                #print qcChange
+                cmd3 = """INSERT INTO answers VALUES('%s', 1, %s, %s, null)""" % (datetime.date.today(), ccChange, qcChange)
+                cur.execute(cmd3)
+                conn.commit()
+                cmd4 = 'SELECT * FROM answers where class_code = %s and question_id = %s' % (ccChange, qcChange)
+                cur.execute(cmd4)
+                #print cur.fetchall();
             
         return  render_template('menu.html', results=results,res=res,question=question)
     if 'username' not in session:  
