@@ -49,11 +49,11 @@ INSERT INTO map_question VALUES (3, 'filepath', '235, 76');
 
 CREATE TABLE answers (
     date date,
-    status int,
+    status varchar(35),
     class_code int references class(class_code),
     question_id int references question(question_id),
     answer_filepath text);
     
-INSERT INTO answers VALUES('2016-1-18', 2, 1234, 1, 'bloop');
-INSERT INTO answers VALUES(null, 1, 1234, 1, null);
-INSERT INTO answers VALUES(null, 1, 1111, 2, null);
+INSERT INTO answers VALUES('2016-1-18', 'undisplay', 1234, 1, 'bloop');
+INSERT INTO answers VALUES(null, 'undisplay', 1234, 1, null);
+INSERT INTO answers VALUES(null, 'undisplay', 1111, 2, null);

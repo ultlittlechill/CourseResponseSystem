@@ -15,14 +15,16 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key= os.urandom(24).encode('hex')
 
-currentUser = ''
-filename=''
+currentQuestion = ''
+currentClass = ''
+
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
            
 def connectToDB():
-    connectionString='dbname=crs user=postgres password=root host=localhost'
+    connectionString='dbname=crs1 user=postgres password=maher123 host=localhost'
     print connectionString
     try:
         return psycopg2.connect(connectionString)
@@ -293,7 +295,7 @@ def loadimage():
 def hiliteimage():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    print filename+" Hi"
+    print " Hi"
     if 'username' in session:
         return  render_template('controlPanelImage.html')
     if 'username' not in session:  
@@ -308,7 +310,57 @@ def hiliteimage():
 def answerQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
+    results4 = []
+    shortanswer=''
+    if 'username' in session:
+        
+        print currentClass + currentQuestion + "This is it"
+        query = "SELECT question_id FROM answers WHERE class_code = %s AND status ='display' " % (session['username']) 
+        cur.execute(query)
+        results = cur.fetchall()
+        print results
+        if not results:
+            mess="Your Professor have not displayed any question yet"
+            return render_template('answer.html',answers='', mess=mess)
+        
+        query = "SELECT question,question_type FROM question WHERE question_id = %s" % (results[0][0])
+        cur.execute(query)
+        results2 = cur.fetchall()
+        print results2
+        if not results2:
+            mess="Your Professor have not displayed any question yet"
+            return render_template('answer.html',answers='', mess=mess)
+        
+        if results2[0][1]==0:
+            query = "SELECT * FROM multiple_choice_question WHERE question_id = %s" % (results[0][0])
+            cur.execute(query)
+            results3 = cur.fetchall()
+            results4 = []
+            resultsTemp = results3
+            #print resultsTemp
+            del resultsTemp[0][6]
+            for result in resultsTemp[0]:
+                if result != None:
+                    results4.append(result)
+            del results4[0]
+            #print results4 
+        if results2[0][1]==1:
+            # this is for short answer question
+            shortanswer="<textarea rows='4' cols='30' id='shortAnswer' name='shortAnswer' style='color:black;' placeholder='write your answer here' required='required' type='textfield' ></textarea>"
+            
+            
+        print results2
+        if request.method == 'POST':
+            query = "UPDATE answers SET status = 'undisplay' WHERE status = 'display';" 
+            cur.execute(query)
+            conn.commit()
+            
+            return redirect(url_for('studentHome'))
+        
+        
+        
+    return render_template('answer.html', answers=results2,answers2=results4,shortanswer=shortanswer)
+    """
     # check current class (cc)
     cc = session['username']
     print cc
@@ -352,6 +404,7 @@ def answerQuestion():
     #qImage = None
     
     return render_template('answer.html', answers=results2, answers2=results4, qImage=qImage)
+    """
 
 #short answer question
 @app.route('/answer2', methods=['GET','POST'])
@@ -417,6 +470,8 @@ def menu():
                 #buicom = 'CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id))'
                 #cur.execute(buicom)
                 # find class code and question code, then change question state to be 1
+                currentQuestion=curQ
+                currentClass=curC
                 cmd1 = "SELECT class_code FROM class WHERE class_name = '%s'" % curC
                 #print cmd1
                 cur.execute(cmd1)
@@ -426,7 +481,7 @@ def menu():
                 cur.execute(cmd2)
                 qcChange = cur.fetchall()[0][0]
                 #print qcChange
-                cmd3 = """INSERT INTO answers VALUES('%s', 1, %s, %s, null)""" % (datetime.date.today(), ccChange, qcChange)
+                cmd3 = """INSERT INTO answers VALUES('%s', 'display', %s, %s, null)""" % (datetime.date.today(), ccChange, qcChange)
                 cur.execute(cmd3)
                 conn.commit()
                 cmd4 = 'SELECT * FROM answers where class_code = %s and question_id = %s' % (ccChange, qcChange)

@@ -18,17 +18,11 @@
 <h1>QUESTION</h1>
 
 
-<tr>{{answers[0][2]}}</tr>
+<tr>{% if  answers %}{{answers[0][0]}}{% endif %} {{mess}}</tr>
 <br><br>
 
 <!--<div id="img">
-<<<<<<< HEAD
     <img src="questionImages/math2.png" alt="" width="450" height="309.6" />
-=======
-
-    <img src="questionImages/math2.png" alt="" width="450" height="309.6" />
-
->>>>>>> 33cd526bc76be6aae979f318cc886962d3e2fdc9
 </div>-->
 
 
@@ -62,6 +56,7 @@ document.write("<b>Hi Boy</b>");
         <input type="radio" name="option" value="{{a}}" required="required" >{{a}}</input>
         <br>
     {% endfor %}
+    {{shortanswer|safe}}
 
     <br>
     <br>
