@@ -15,7 +15,7 @@
 
 
 
-<h1>QUESTION</h1>
+
 
 
 <tr>{% if  answers %}{{answers[0][0]}}{% endif %} {{mess}}</tr>
@@ -60,8 +60,9 @@ document.write("<b>Hi Boy</b>");
 
     <br>
     <br>
-
+    {% if not  mess %}
     <button type="submit" name="submit" style="color:black;width:80px;" value="Submit"><a>Submit  </a></button>&nbsp; &nbsp;
+    {% endif %}
 </form>
 
 
