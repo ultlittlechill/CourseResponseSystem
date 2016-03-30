@@ -100,6 +100,7 @@ imgT.src = "static/images/uploads/"+pic;
   </div>
   
   <div id="infor" >
+{% if notification =='success' %}<div class="alert-box success"><span>success: </span>{{mess}}</div>{% endif %}
 {% if request.args.get('notification', '') =='codeError' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
 {% if request.args.get('notification', '') =='error' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
 {% if request.args.get('notification', '') =='success' %}<div class="alert-box success"><span>success: </span>{{request.args.get('mess', '')}}</div>{% endif %}

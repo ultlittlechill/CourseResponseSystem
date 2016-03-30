@@ -178,7 +178,7 @@ function openW() {
                         </div>
                         
                         <div>
-                        <button type="submit" style="color:black;"><a>Create Question </a></button>
+                        <button type="submit" name="createq"style="color:black;"><a>Create Question </a></button>
                         </div>
                         </form>
 
@@ -186,19 +186,19 @@ function openW() {
             
             <fieldset class="sf" style="color:black; border-width:3px; "  >
                          <legend ><h4>Modify Question </h4></legend>
-                         </select>
+                         <form id="dformq" onsubmit="" method="POST" action="{{url_for('manageQuestion')}}">
                              
-                            <select>
+                            <select name="questionD" class="selectpicker form-control">
                              {% for i in res %}
 
-                                      <option  name="question" value="{{i[0]}}">{{i[0]}} </option>
+                                      <option   value="{{i[0]}}">{{i[0]}} </option>
 
                         {% endfor %}
                              </select>
-                             <form id="dformq" onsubmit="">
+                             
                              <div>
                          <button type="submit" style="color:black;"><a>Modify Question </a></button>        
-                        <button type="submit" onclick="deleteConfirmq()" style="color:black;"><a>Delete Question </a></button>
+                        <button type="submit" onclick="deleteConfirmq()"name="deleteQ" style="color:black;"><a>Delete Question </a></button>
                         </div>
                         </form>
                 

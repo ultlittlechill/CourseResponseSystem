@@ -139,7 +139,7 @@ def delete():
                 cur.execute("DELETE FROM class WHERE class_name ilike %s",[classname] )
       
                 conn.commit()
-                mess="Your calss has been deleted!"
+                mess="Your class has been deleted!"
                 notification="success"
                 query = "select * from class " 
                 print query
@@ -196,34 +196,38 @@ def edit():
 def manageQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    mess=''
+    notification=''
     if 'username' in session:
         query = "select question from question " 
         cur.execute(query)
         res = cur.fetchall()
+        print"Tryin to go to deleteq"
         
         query = "select * from class " 
         cur.execute(query)
         results = cur.fetchall()
         if request.method == 'POST':
-            question = request.form['question']
-            comment=request.form['comment']
-            print"we inter post"
+            if('createq' in request.form ):
+                question = request.form['question']
+                comment=request.form['comment']
+                print"we inter post"
             
             
-            try:
+                try:
                     cur.execute("""INSERT INTO question
                     VALUES (DEFAULT,1,%s, %s,NULL);""",[question,comment] )
                     #cur.execute = ("select question_id from question where question_id=%s ",[question])
                     #QuestionId=cur.fetchall()
-            except:
+                except:
                     print "could not add the question!!"
                     mess="could not add the question!!"
                     notification="error"
                     conn.rollback()
-            conn.commit() 
-            cur.execute("select count(question_id) from question")
-            qid = cur.fetchone()
-            print qid[0]
+                conn.commit() 
+                cur.execute("select count(question_id) from question")
+                qid = cur.fetchone()
+                print qid[0]
             
             
             if('type' in request.form and (request.form['type']=="Multiple Choices")):
@@ -253,7 +257,10 @@ def manageQuestion():
                         VALUES(%s,%s,%s,%s,%s,%s,%s);""",[qid[0],answerA,answerB,answerC,answerD,answerE,correctAnswer] ))
                         print "could not add the multiple_choice_question!!"
                         conn.rollback()
-                conn.commit()  
+                conn.commit() 
+                query = "select question from question " 
+                cur.execute(query)
+                res = cur.fetchall()
                 return render_template('controlPanelMQ1.html',results=results,res=res)
             
             elif('type' in request.form and (request.form['type']=="Short Answer")):
@@ -269,6 +276,27 @@ def manageQuestion():
                     conn.rollback()
                 conn.commit()
             
+            elif('deleteQ' in request.form ):
+                print "we trying to delete this question"
+                curq = request.form.get('questionD')
+                print curq
+                cur.execute("SELECT question_id FROM question WHERE question = '%s'" % (curq))
+                results = cur.fetchone()
+                print results
+                cur.execute("DELETE FROM answers WHERE question_id = %s",[results[0]] )
+                conn.commit()
+                cur.execute("DELETE FROM multiple_choice_question WHERE question_id = %s",[results[0]] )
+                conn.commit()
+                cur.execute("DELETE FROM question WHERE question_id = %s",[results[0]])
+                conn.commit()
+                
+                query = "select question from question " 
+                cur.execute(query)
+                res = cur.fetchall()
+                
+                mess="Your question has been deleted!"
+                notification="success"
+                return render_template('controlPanelMQ1.html',mess=mess,notification=notification,results=results,res=res)
             
                     
                 #resp.status_code = 204
