@@ -62,7 +62,7 @@ imgT.src = "static/images/uploads/"+pic;
   
 </head>
 
-<body>
+<body id="BG">
   
   
  <script >
@@ -144,6 +144,42 @@ imgT.src = "static/images/uploads/"+pic;
  </center>
 </div>
 </div>
+<div id="footer">
+			<select id="bg" >
+			  <option style="background-image:url(static/images/background/bg.png)">background 1 </option>
+			  <option style="background-image:url(static/images/background/em.jpg)">background 2 </option>
+			  <option style="background-image:url(static/images/background/b.PNG)">background 3 </option>
+			  
+			</select>
+			
+			<button onclick="changeBg();" type="button">Apply</button>
+			
+		</div>
+
 </body>
 </html>
     
+    
+    
+<script>
+  
+  function changeBg(){
+    
+    if (document.getElementById("bg").value=='background 1')
+    {
+      document.getElementById('BG').style.background="url('static/images/background/bg.png')";
+     // document.getElementById('BG').style.backgroundRepeat="no-repeat";
+    }
+    else if (document.getElementById("bg").value=='background 2')
+    {
+      document.getElementById('BG').style.background="url('static/images/background/em.jpg')";
+     // document.getElementById('BG').style.backgroundRepeat="no-repeat";
+    }
+
+    else if (document.getElementById("bg").value=='background 3')
+    document.getElementById('BG').style.background="url('static/images/background/b.PNG')";
+    //document.getElementById('BG').style.backgroundRepeat="no-repeat";
+  }
+  
+  
+</script>

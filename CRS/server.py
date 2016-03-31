@@ -208,11 +208,12 @@ def manageQuestion():
         cur.execute(query)
         results = cur.fetchall()
         if request.method == 'POST':
-            if('createq' in request.form ):
+            
+            if('createq' in request.form and (request.form['type']=="Short Answer") ):
+                
+                print"we inter post"
                 question = request.form['question']
                 comment=request.form['comment']
-                print"we inter post"
-            
             
                 try:
                     cur.execute("""INSERT INTO question
@@ -230,7 +231,23 @@ def manageQuestion():
                 print qid[0]
             
             
-            if('type' in request.form and (request.form['type']=="Multiple Choices")):
+            elif('type' in request.form and (request.form['type']=="Multiple Choices")):
+                question = request.form['question']
+                comment=request.form['comment']
+                
+                try:
+                    cur.execute("""INSERT INTO question
+                    VALUES (DEFAULT,0,%s, %s,NULL);""",[question,comment] )
+                    #cur.execute = ("select question_id from question where question_id=%s ",[question])
+                    #QuestionId=cur.fetchall()
+                except:
+                    print "could not add the question!!"
+                    mess="could not add the question!!"
+                    notification="error"
+                    conn.rollback()
+                conn.commit()
+                cur.execute("select question_id from question where question='%s'" % question )
+                qid = cur.fetchone()
                 print"we inter type"
                 questiontype= request.form['type']
                 answerA=request.form['answerA']
