@@ -3,7 +3,8 @@
 
 <li><a  href="/menu">Administer Question</a></li>
 <li><a  href="/controlPanel">Manage Classes</a></li>
-<li><a href="/controlPanelMQ1">Manage Questions</a></li>
+<li><a href="/controlPanelMQ1">Create Questions</a></li>
+<li><a href="/modifyQ">Modify Questions</a></li>
 <li><a href="/logout">Logout </a></li>
 {% endblock %}
 {% block content %}
@@ -13,8 +14,11 @@
         <img src="static/images/setting.png" alt=""  width="400" height="400" />
 
 </div>
+
 <div id="right">
+    
     <div id="mngc">
+        
         
         <div style="width:400px; height:200px;">
         
@@ -23,7 +27,7 @@
                          <div>
                              <form method="post" action ="{{url_for('menu')}}">
                              <div class="class">
-                             <select name = "className" class = "selectpicker form-control">
+                             <select name = "className" {% if display %} value="{{curC}}" {% endif %} class = "selectpicker form-control">
                              {% for r in results %}
 
                                       <option name="classn" value="{{r[1]}}">{{r[1]}}</option>
@@ -32,7 +36,7 @@
                              </select>
                             
                             <!--<form method = 'POST' action = '/menu'>-->
-                                <select name="question" class="selectpicker form-control">
+                                <select name="question" {% if display %}value="{{curQ}}"{% endif %} class="selectpicker form-control">
                                  {% for i in res %}
                                       
                                       <option   value="{{i[0]}}">{{i[0]}} </option>
@@ -44,8 +48,9 @@
                              
                                      <input onclick="" type="submit" name="display" value="Display" id="display"/>
                                      
-                                     <input onclick=" " type="submit" style="" value="Show Result" name="showr" id="ShowR"/>
+                                     
                                      <input onclick="" type="button" style="display:none" value="Share Result" id="shareR"/>
+                                     <input onclick="" type="submit" style="" value="Show Result" name="showr" id="ShowR"/>
                              </form>
                             <!-- <img src='static/images/cloud_large.png' alt='' /> -->
                          </div>
@@ -54,17 +59,18 @@
                              
                          </div>
   
-  {% if display %}
+  {% if display or chart %}
 <fieldset class="sf" style="color:black; border-width:3px;  "  >
                          <legend ><h4>Displayed Question</h4></legend>
                          <form method="post" action ="{{url_for('menu')}}">
                              
                          
-                         {{curC}}:&nbsp; &nbsp;<input onclick="" type="submit" style="display" name="hide" value="Hide" id="hide"/>
+                         {{curC}}:&nbsp; &nbsp;<input onclick="submitFormOkay = true;" type="submit" style="display" name="hide" value="Hide" id="hide"/>
+                         
                          </form>
 </fieldset>
 {% endif %}                       
-                        
+                      
     
 </fieldset>
 
@@ -72,6 +78,26 @@
 
    </div> 
 </div>
+{% if filename %}
+<div style="width:500px;height:500px;">
+          
+        <object type="image/svg+xml"data='{{filename}}'></object>
+        
+
+</div>
+ {% endif %}
+ {% if s %}
+<div style="width:500px;height:500px;">
+    
+        <img src="{{fname}}"></img>      
+        
+        
+
+</div>
+ {% endif %}
+ 
+    
+
 <script type="text/javascript" >
     function showres() 
 {
@@ -99,7 +125,7 @@
 </script>
 
 
-
+{{conf|safe}}
 
 
 

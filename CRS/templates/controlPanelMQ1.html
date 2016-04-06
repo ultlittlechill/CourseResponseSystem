@@ -4,7 +4,8 @@
 
 <li><a  href="/menu">Administer Question</a></li>
 <li><a  href="/controlPanel">Manage Classes</a></li>
-<li><a href="/controlPanelMQ1">Manage Questions</a></li>
+<li><a href="/controlPanelMQ1">Create Questions</a></li>
+<li><a href="/modifyQ">Modify Questions</a></li>
 <li><a href="/logout">Logout </a></li>
 {% endblock %}
 {% block jss %}
@@ -122,13 +123,13 @@ function openW() {
     <div id="mngc">
 
         <fieldset class="sf" style="color:black; border-width:3px; "  >
-            <legend ><h1>Manage Questions</h1></legend>
+            <legend ><h4>Create Questions</h4></legend>
 
             <div id="creatClass">
                 <form method="post" name="thisForm" action="{{url_for('manageQuestion')}}" enctype=multipart/form-data >
                     <fieldset class="sf" style="color:black; border-width:3px;float:left "  >
 
-                        <legend ><h4>Create Question</h4></legend>
+                        <!--<legend ><h4>Create Question</h4></legend>-->
                         <p> 
                             <label for="class" class="class" data-icon="u" >  Question:  </label>
                             <textarea rows="2" cols="60" id="question" name="question" style="color:black;"  required="required" type="textfield" placeholder="Write your question here"></textarea>
@@ -184,25 +185,7 @@ function openW() {
 
             </div>
             
-            <fieldset class="sf" style="color:black; border-width:3px; "  >
-                         <legend ><h4>Modify Question </h4></legend>
-                         <form id="dformq" onsubmit="" method="POST" action="{{url_for('manageQuestion')}}">
-                             
-                            <select name="questionD" class="selectpicker form-control">
-                             {% for i in res %}
-
-                                      <option   value="{{i[0]}}">{{i[0]}} </option>
-
-                        {% endfor %}
-                             </select>
-                             
-                             <div>
-                         <button type="submit" style="color:black;"><a>Modify Question </a></button>        
-                        <button type="submit" onclick="deleteConfirmq()"name="deleteQ" style="color:black;"><a>Delete Question </a></button>
-                        </div>
-                        </form>
-                
-	                    </fieldset>
+            
             
                     </fieldset>
                     
@@ -212,24 +195,6 @@ function openW() {
         </fieldset>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-<script>
-function deleteConfirmq() {
-    document.getElementById("dformq").onsubmit= function (){return confirm('Do you really want to delete this Question?');}
-    
-}
-</script>
-
 
 
 
