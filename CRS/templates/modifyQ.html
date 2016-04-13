@@ -1,0 +1,108 @@
+
+{% extends "layout.html" %}
+{% block menuBar %}
+
+<li><a  href="/menu">Administer Question</a></li>
+<li><a  href="/controlPanel">Manage Classes</a></li>
+<li><a href="/controlPanelMQ1">Create Questions</a></li>
+<li><a href="/modifyQ">Modify Questions</a></li>
+<li><a href="/logout">Logout </a></li>
+{% endblock %}
+
+{% block content %}
+
+
+
+<div id="img">
+
+        <img src="static/images/class.png" alt="" width="450" height="309.6" />
+
+    </div>
+
+<div id="right">
+<style>
+
+            
+            #canvas {
+                border:1px solid blue;
+              
+
+
+            }
+        </style>
+    
+
+    <div id="mngc">
+
+        
+
+            
+            
+            <fieldset class="sf" style="color:black; border-width:3px; "  >
+                         <legend ><h4>Modify Question </h4></legend>
+                         <form id="dformq" onsubmit="" method="POST" action="{{url_for('modifyQ')}}">
+                             
+                              <div id="questionsNames">
+
+                        {% for r in res %}
+                        
+                        <div class="question">
+                            
+                            <input  type="radio"  name="question" value="{{r[0]}}" required="required" >{{r[0]}}
+                        </div>
+
+
+                        {% endfor %}
+              </div>
+                             
+                           <!--  
+                            <select name="questionD" class="selectpicker form-control">
+                             {% for i in res %}
+
+                                      <option   value="{{i[0]}}">{{i[0]}} </option>
+
+                        {% endfor %}
+                             </select>-->
+                             
+                             <div>
+                         <button type="submit" name="modify" style="color:black;"><a>Modify Question </a></button>        
+                        <button type="submit" onclick="deleteConfirmq()"name="deleteQ" style="color:black;"><a>Delete Question </a></button>
+                        </div>
+                        </form>
+                
+	                    </fieldset>
+            
+                    
+                    
+                    
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+function deleteConfirmq() {
+    document.getElementById("dformq").onsubmit= function (){return confirm('Do you really want to delete this Question?');}
+    
+}
+</script>
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,91 @@
+
+{% extends "layout.html" %}
+
+{% block menuBar %}
+
+<li><a  href="/menu">Administer Question</a></li>
+<li><a  href="/controlPanel">Manage Classes</a></li>
+<li><a href="/controlPanelMQ1">Manage Questions</a></li>
+<li><a href="/modifyQ">Modify Questions</a></li>
+<li><a href="/logout">Logout </a></li>
+{% endblock %}
+
+
+{% block content %}
+<h4 style="color:red;">{{request.args.get('mess', '')}}</h4>
+
+<div id="img">
+
+        <img src="static/images/class.png" alt="" width="450" height="309.6" />
+
+    </div>
+
+<div id="right">
+    <div id="mngc">
+<fieldset class="sf" style="color:black; border-width:3px;float:left "  >
+                         <legend ><h4>Edit Question</h4></legend>
+                         
+                         
+    <form method="post" action="{{url_for('modifyQuestion')}}">
+        <table>
+            
+                <td></td>
+            
+        
+        
+        
+        <tr>
+            <td>Question:</td>
+        <td><input type="textarea"  name="question" value="{{request.args.get('question', '')}}"/></td>
+        </tr>
+        <tr>
+            {% if request.args.get('dis', '') %}
+        <td>  Answer:  </td><tr></tr>
+        <td>  A)  </td>
+        <td><input type="text"  name="option" style="" value="{{request.args.get('a', '')}}"/></td>
+        </tr>
+        <td>  B)  </td>
+        <td><input type="text"  name="option" style="" value="{{request.args.get('b', '')}}"/></td>
+        </tr>
+        <td>  C)  </td>
+        <td><input type="text"  name="option" style="" value="{{request.args.get('c', '')}}"/></td>
+        </tr>
+        <td>  D)  </td>
+        <td><input type="text"  name="option" style="" value="{{request.args.get('d', '')}}"/></td>
+        </tr>
+        <td>  E)  </td>
+        <td><input type="text"  name="option" style="" value="{{request.args.get('e', '')}}"/></td>
+        </tr>
+        {% endif %}
+        <td> Comment:  </td>
+        <td><input type="text"  name="option" style="" value="{{request.args.get('questionComment', '')}}"/></td>
+        </tr>
+        
+
+       
+        </table>
+        <button type="submit" name="submit" style="color:black;" value="Save"><a>Save  </a></button>&nbsp; &nbsp;
+        <button type="submit" name="submit" style="color:black;" value="Cancel"><a>Cancel  </a></button>&nbsp; &nbsp;
+    </form>
+</fieldset>
+   </div> 
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

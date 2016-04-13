@@ -4,7 +4,8 @@
 =========================================================*/
 body {
   width:100%;
-  background: #10223a;
+  background:#10223a;
+  background-image: #10223a;
   border-left:100px;
   color: #808289;
   font: 400 16px/29px "Ubuntu", sans-serif;
@@ -158,6 +159,21 @@ display: table-cell;
    min-width:100px;
 }
 
+
+
+
+#questionsNames {
+    min-height:150px;
+  max-height:200px;
+  overflow: auto;
+  min-width:400px
+}
+
+.question{
+  text-align:left;
+  max-width:400px;
+   min-width:200px;
+}
 
 
 

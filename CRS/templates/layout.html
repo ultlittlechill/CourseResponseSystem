@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="format-detection" content="telephone=no"/>
   <link rel="stylesheet" href="static/css/style.css">
-  
+   <script type="text/javascript" src="static/css/js/Chart.min.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
         <script src="static/js/jquery.maphilight.js"></script>
  
@@ -53,8 +53,6 @@ imgT.src = "static/images/uploads/"+pic;
 }
     
   </script>
-  
-  
   
   
   
@@ -164,9 +162,10 @@ imgT.src = "static/images/uploads/"+pic;
 <script>
   
   function changeBg(){
-    
+    //
     if (document.getElementById("bg").value=='background 1')
     {
+      
       document.getElementById('BG').style.background="url('static/images/background/bg.png')";
      // document.getElementById('BG').style.backgroundRepeat="no-repeat";
     }
