@@ -34,7 +34,9 @@
             <td>
                 {% for i in range(5) %}
                 Option {{multipleChoiceLabels[i]}}: {{multipleChoiceResults[0][i+1]}}
-                <br><br>
+                {% if i != 4 %}
+                <br>
+                {% endif %}
                 {% endfor %}
             </td>
         </tr>
@@ -43,7 +45,7 @@
                 <h3>Correct Answer:</h3>
             </td>
             <td>
-                {{multipleChoiceResults[0][6]}}
+                Option {{multipleChoiceResults[0][6]}} is the correct answer.
             </td>
         </tr>
         {% endif %}
