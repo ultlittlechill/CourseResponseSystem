@@ -34,7 +34,9 @@
             <td>
                 {% for i in range(5) %}
                 Option {{multipleChoiceLabels[i]}}: {{multipleChoiceResults[0][i+1]}}
-                <br><br>
+                {% if i != 4 %}
+                <br>
+                {% endif %}
                 {% endfor %}
             </td>
         </tr>
