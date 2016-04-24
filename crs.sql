@@ -40,7 +40,7 @@ CREATE TABLE multiple_choice_question (
     option_e text,
     correct_answer varchar(1));
     
-INSERT INTO multiple_choice_question VALUES (1, '3', '7', '4', null, null, 3);
+INSERT INTO multiple_choice_question VALUES (1, '3', '7', '4', '5', '0', 3);
 
 CREATE TABLE map_question (
     question_id int references question(question_id),
