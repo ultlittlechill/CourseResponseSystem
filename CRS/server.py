@@ -991,9 +991,17 @@ def studentHome():
                 cur.execute("select * FROM question WHERE question_id = %s",[questionid] )
                 results = cur.fetchall()
                 
+                #new way to track answer choices and correct answer
+                multipleChoiceResults = []
+                if results[1] == 0:
+                    cur.execute("SELECT * FROM multiple_choice_question WHERE question_id = %s",[questionid])
+                    multipleChoiceResults = cur.fetchall()
+                    
+                
                 cur.execute("select * FROM answers WHERE share and class_code=%s and question_id = %s",[session['username'],questionid] )
                 res = cur.fetchall()
-                return render_template('sampleQuestion1.html',res=res,results=results,classcode=classcode,empty=empty)
+                return render_template('sampleQuestion1.html',res=res,results=results,classcode=classcode,empty=empty,
+                                        multipleChoiceLabels={0:'A',1:'B',2:'C',3:'D',4:'E'},multipleChoiceResults=multipleChoiceResults)
         else:
             try:
                 empty=False

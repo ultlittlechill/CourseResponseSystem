@@ -26,9 +26,30 @@
                 {{r[2]}}
             </td>
         </tr>
+        {% if results[1] == 0 %}
         <tr>
             <td>
-                <h3>Answer:</h3>
+                Answer Choices: 
+            </td>
+            <td>
+                {% for i in range(5) %}
+                Option {{multipleChoiceLabels[i]}}: {{multipleChoiceResults[i+1]}}
+                <br><br>
+                {% endfor }
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Correct Answer:
+            </td>
+            <td>
+                {{multipleChoiceResults[6]}}
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td>
+                <h3>Comment:</h3>
             </td>
             <td>
                 {{r[3]}}
