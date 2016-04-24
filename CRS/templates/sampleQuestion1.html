@@ -26,24 +26,24 @@
                 {{r[2]}}
             </td>
         </tr>
-        {% if results[1] == 0 %}
+        {% if results[0][1] == 0 %}
         <tr>
             <td>
-                Answer Choices: 
+                <h3>Answer Choices:</h3> 
             </td>
             <td>
                 {% for i in range(5) %}
-                Option {{multipleChoiceLabels[i]}}: {{multipleChoiceResults[i+1]}}
+                Option {{multipleChoiceLabels[i]}}: {{multipleChoiceResults[0][i+1]}}
                 <br><br>
-                {% endfor }
+                {% endfor %}
             </td>
         </tr>
         <tr>
             <td>
-                Correct Answer:
+                <h3>Correct Answer:</h3>
             </td>
             <td>
-                {{multipleChoiceResults[6]}}
+                {{multipleChoiceResults[0][6]}}
             </td>
         </tr>
         {% endif %}
