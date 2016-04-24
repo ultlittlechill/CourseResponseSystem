@@ -44,18 +44,23 @@
         
         <td>  A)  </td>
         <td><input type="text"  name="optionA" style="" value="{{request.args.get('a', '')}}"/></td>
+        <td><input type="radio"  name="option" value="{{request.args.get('a', '')}}" required/></td>
         </tr>
         <td>  B)  </td>
         <td><input type="text"  name="optionB" style="" value="{{request.args.get('b', '')}}"/></td>
+        <td><input type="radio"  name="option" value="{{request.args.get('b', '')}}" required/></td>
         </tr>
         <td>  C)  </td>
         <td><input type="text"  name="optionC" style="" value="{{request.args.get('c', '')}}"/></td>
+        <td><input type="radio"  name="option" value="{{request.args.get('c', '')}}" required/></td>
         </tr>
         <td>  D)  </td>
         <td><input type="text"  name="optionD" style="" value="{{request.args.get('d', '')}}"/></td>
+        <td><input type="radio"  name="option" value="{{request.args.get('d', '')}}" required /></td>
         </tr>
         <td>  E)  </td>
         <td><input type="text"  name="optionE" style="" value="{{request.args.get('e', '')}}"/></td>
+        <td><input type="radio"  name="option" value="{{request.args.get('e', '')}}" required/></td>
         </tr>
         {% else %}
         {% endif %}

@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from flask import Markup
 import pygal
 from PIL import Image
-
+from string import lowercase
 
 
 
@@ -70,8 +70,15 @@ def connectToDB():
 @app.route('/',methods=['GET', 'POST'])
 def mainIndex():
     conn=connectToDB()
-    cur= conn.cursor(cursor_factory=psycopg2.extras.DictCursor) 
-    return render_template('index.html')
+    cur= conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if 'username' in session:
+        if not session['username'].isdigit() :
+            return redirect(url_for('menu'))
+        if session['username'].isdigit():
+            return redirect(url_for('studentHome'))
+    if 'username' not in session:
+        return render_template('index.html')
+    
     
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -161,9 +168,11 @@ def delete():
         results = cur.fetchall()
     
         if request.method == 'POST':
+            classCode = request.form['classn']
+            print classCode
             if request.form['submit']=='Delete':
                 classname = request.form['classn']
-                classCode = request.form['classCode']
+                
                 cur.execute("DELETE FROM answers WHERE class_code = %s",[classCode] )
                 cur.execute("DELETE FROM class WHERE class_code = %s",[classCode] )
       
@@ -214,7 +223,7 @@ def edit():
                     return  redirect(url_for('controlPanel',mess=mess,notification=notification))
                 else:
                     mess="Invalid inputted!"
-                    notification="warning"
+                    notification="error"
                     return  redirect(url_for('controlPanel',mess=mess,notification=notification))
             elif request.form['submit']=='Cancel':
                  mess="Nothing has been updated!"
@@ -446,8 +455,8 @@ def modifyQuestion():
                             try:
                                 
                                 #conn.commit()
-                                query = "UPDATE multiple_choice_question SET option_a= %s, option_b= %s , option_c=%s, option_d=%s, option_e=%s WHERE question_id=%s ;"
-                                cur.execute(query,[request.form['optionA'],request.form['optionB'],request.form['optionC'],request.form['optionD'],request.form['optionE'],questionID])
+                                query = "UPDATE multiple_choice_question SET option_a= %s, option_b= %s , option_c=%s, option_d=%s, option_e=%s, correct_answer=%s WHERE question_id=%s ;"
+                                cur.execute(query,[request.form['optionA'],request.form['optionB'],request.form['optionC'],request.form['optionD'],request.form['optionE'],request.form['option'],questionID])
                                 
                             except:
                                 print cur.mogrify(query,[request.form['optionA'],request.form['optionB'],request.form['optionC'],request.form['optionD'],request.form['optionE'],questionID])
@@ -581,6 +590,7 @@ def answerQuestion():
             return render_template('answer.html',answers='', mess=mess)
         
         if results2[0][1]==0:
+            
             query = "SELECT * FROM multiple_choice_question WHERE question_id = %s"
             cur.execute(query,[results[0][0]])
             results3 = cur.fetchall()
@@ -890,7 +900,7 @@ def menu():
                     
                     display=False
                     bar_chart = pygal.HorizontalBar()
-                    bar_chart.title = "The Resulte"
+                    bar_chart.title = "The Result"
                     #bar_chart.x_labels = "A","B","C","D","E"
                     bar_chart.add('Option A',[len(answersListA)])
                     bar_chart.add('Option B',[len(answersListB)])

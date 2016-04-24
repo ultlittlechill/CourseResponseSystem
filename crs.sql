@@ -14,7 +14,6 @@ INSERT INTO administrator VALUES ('test@test.com', 'password');
 CREATE TABLE class (
     class_code int,
     class_name varchar(35),
-    background text references administrator(background),
     PRIMARY KEY (class_code));
 
 INSERT INTO class VALUES (1234, 'History');
@@ -56,7 +55,7 @@ CREATE TABLE answers (
     class_code int references class(class_code),
     question_id int references question(question_id),
     answer_filepath text,
-    share boolean;)
+    share boolean);
     
 INSERT INTO answers VALUES('2016-1-18', 'undisplay', 1234, 1, 'bloop',FALSE);
 INSERT INTO answers VALUES(null, 'undisplay', 1234, 1, null,FALSE);

@@ -48,7 +48,6 @@ if (answer[0][1] == 1)
 document.write("<b>Hi Boy</b>"); 
 } 
 </script>-->
-
 <form method = 'POST' action = '/answerQuestion'>
 
 <table>
@@ -57,10 +56,11 @@ document.write("<b>Hi Boy</b>");
     {% for a in answers2 %}
     <tr>
         <td>
-    
+        
         <input type="radio" name="option" value="{{a}}" required="required" >{{a}}</input>
         </td>
         </tr>
+         
     {% endfor %}
     </table>
     {{shortanswer|safe}}
@@ -81,3 +81,7 @@ document.write("<b>Hi Boy</b>");
 
 
 
+<script >function nextChar(c) {
+    return String.fromCharCode(c.charCodeAt(0) + 1);
+}
+</script>
