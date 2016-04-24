@@ -859,6 +859,11 @@ def menu():
                 conn.commit()
                 #UPDATE films SET kind = 'Dramatic' WHERE kind = 'Drama';
                 del answersList[:]
+                del answersListA[:]
+                del answersListB[:]
+                del answersListC[:]
+                del answersListD[:]
+                del answersListE[:]
                 return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,mess=mess,notification=notification,currentQuestion=currentQuestion,currentClass=currentClass)   
             elif 'showr' in request.form:
                 query = "SELECT question_type FROM question WHERE question = '%s'" % curQ
@@ -892,6 +897,7 @@ def menu():
                     
                 if multiplechoice[0]:
                     
+                        
                     cmd2 = "SELECT question_id FROM question WHERE question = '%s'" % curQ
                     cur.execute(cmd2)
                     qcChange = cur.fetchall()[0][0]
@@ -912,6 +918,16 @@ def menu():
                     filename="static/images/barChart/"+str(uuid.uuid1())+str(qcChange)+"_"+str(curC)+"_"+"bar_chart.svg"
                     bar_chart.render_to_file(filename)
                     barcarimage=""
+                    """for i in answersListA:
+                        del answersListA[0]
+                    for i in answersListB:
+                        del answersListB[0]
+                    for i in answersListC:
+                        del answersListC[0]
+                    for i in answersListD:
+                        del answersListD[0]
+                    for i in answersListE:
+                        del answersListE[0]"""
                     return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,filename=filename,currentQuestion=currentQuestion,currentClass=currentClass,barcarimage=barcarimage)
                 
                 
