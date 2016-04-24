@@ -995,7 +995,7 @@ def studentHome():
                 
                 #new way to track answer choices and correct answer
                 multipleChoiceResults = []
-                if results[1] == 0:
+                if results[0][1] == 0:
                     cur.execute("SELECT * FROM multiple_choice_question WHERE question_id = %s",[questionid])
                     multipleChoiceResults = cur.fetchall()
                     
