@@ -575,7 +575,7 @@ def answerQuestion():
         results2 = cur.fetchall()
         print results2
         if not results2:
-            mess="Your Professor have not displayed any question yet"
+            mess="Your Professor has not displayed a question yet"
             return render_template('answer.html',answers='', mess=mess)
         
         if results2[0][1]==0:
