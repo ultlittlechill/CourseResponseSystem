@@ -18,7 +18,7 @@ function myFunction() {
     
     if(document.getElementById('short').checked ) {
        document.getElementById("short").checked = true;
-  document.getElementById("demo").innerHTML = "<textarea rows='4' cols='50' id='shortAnswer' name='shortAnswer' style='color:black;' placeholder='write your answer here' required='required' type='textfield' ></textarea><br>";
+  document.getElementById("demo").innerHTML = "<span></span>"//<textarea rows='4' cols='50' id='shortAnswer' name='shortAnswer' style='color:black;' placeholder='write your answer here' required='required' type='textfield' ></textarea><br>";
     
         
     }else if(document.getElementById('mutiple').checked) {
@@ -140,7 +140,7 @@ function openW() {
                         <label for="class" class="class" data-icon="u"  >  Question Type:  </label>
                         <input type="radio" id="short" name="type" onclick="myFunction()" style="color:black;" value="Short Answer" required="required" />Short Answer
                         <input type="radio" id="mutiple" name="type"onclick="myFunction()" style="color:black;" value="Multiple Choices" required="required" />Multiple Choices
-                        <input type="radio" id="maps" name="type" onclick="myFunction()"style="color:black;" value="Map" required="required" />Map
+                        <!--<input type="radio" id="maps" name="type" onclick="myFunction()"style="color:black;" value="Map" required="required" />Map-->
                         
                         <p>
                             <span id="demo">
