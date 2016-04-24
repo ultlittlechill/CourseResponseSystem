@@ -3,10 +3,14 @@ import psycopg2
 import psycopg2.extras
 import os
 import sys 
+import uuid
 import re
 from collections import Counter
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import datetime
+import pytz
+from datetime import datetime,date
+from pytz import timezone
 from flask import Flask, session, redirect, url_for, escape, request, render_template
 from werkzeug import secure_filename
 import matplotlib.pyplot as plt
@@ -44,8 +48,10 @@ answersListC=[]
 answersListD=[]
 answersListE=[]
 choices=[]
+modifyQu=[]
 multiplechoice=[]
 multiplechoice.append(False)
+
 
 
 
@@ -115,7 +121,7 @@ def controlPanel():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     i=1
     if 'username' in session:
-        query = "select * from class " 
+        query = "select * from class ORDER BY class_name " 
         cur.execute(query)
         results = cur.fetchall()
     
@@ -134,14 +140,14 @@ def controlPanel():
                 return  redirect(url_for('controlPanel',mess=mess,notification=notification))
       
             
-            query = "select * from class " 
+            query = "select * from class ORDER BY class_name " 
             print query
             cur.execute(query)
             results = cur.fetchall()
             mess="Your class has been created"
             notification="success"
             return  redirect(url_for('controlPanel',mess=mess,notification=notification))    
-    if 'username' not in session:  
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanel.html',results=results)
 
@@ -150,26 +156,26 @@ def delete():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if 'username' in session:
-        query = "select * from class " 
+        query = "select * from class ORDER BY class_name " 
         cur.execute(query)
         results = cur.fetchall()
     
         if request.method == 'POST':
             if request.form['submit']=='Delete':
                 classname = request.form['classn']
-                cur.execute("DELETE FROM class WHERE class_name ilike %s",[classname] )
+                cur.execute("DELETE FROM class WHERE class_name = %s",[classname] )
       
                 conn.commit()
                 mess="Your class has been deleted!"
                 notification="success"
-                query = "select * from class " 
+                query = "select * from class ORDER BY class_name" 
                 print query
                 cur.execute(query)
                 results = cur.fetchall()
                 return  redirect(url_for('controlPanel',mess=mess,notification=notification))
             elif request.form['submit']=='Edit':
                  classname = request.form['classn']
-                 cur.execute("select * FROM class WHERE class_name ilike %s",[classname] )
+                 cur.execute("select * FROM class WHERE class_name = %s",[classname] )
                  results = cur.fetchall()
                  for r in results:
                      name=r[1]
@@ -178,7 +184,7 @@ def delete():
                      
                  return redirect(url_for('edit',code=code,name=name))
                 
-    if 'username' not in session:  
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanel.html',results=results)
 
@@ -191,24 +197,29 @@ def edit():
     if 'username' in session:
         if request.method == 'POST':
             if request.form['submit']=='Save':
-                print"Y it is not working",
-                classname = request.form['classn']
-                print classname
-                classc = request.form['classcode']
-                print classc
-                
-                cur.execute("UPDATE class SET class_name = %s WHERE class_code = %s",[classname,classc] )
-      
-                conn.commit()
-                mess="Your class info has been updated!"
-                notification="success"
-                return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+                if request.form['classn']:
+                    print"Y it is not working",
+                    classname = request.form['classn']
+                    print classname
+                    classc = request.form['classcode']
+                    print classc
+                    
+                    cur.execute("UPDATE class SET class_name = %s WHERE class_code = %s",[classname,classc] )
+          
+                    conn.commit()
+                    mess="Your class info has been updated!"
+                    notification="success"
+                    return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+                else:
+                    mess="Invalid inputted!"
+                    notification="warning"
+                    return  redirect(url_for('controlPanel',mess=mess,notification=notification))
             elif request.form['submit']=='Cancel':
                  mess="Nothing has been updated!"
                  notification="notice"
                  return  redirect(url_for('controlPanel',mess=mess,notification=notification))
                 
-    if 'username' not in session:  
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanelE.html')
 
@@ -220,12 +231,12 @@ def manageQuestion():
     mess=''
     notification=''
     if 'username' in session:
-        query = "select question from question " 
+        query = "select question from question ORDER BY question_id ASC" 
         cur.execute(query)
         res = cur.fetchall()
         print"Tryin to go to deleteq"
         
-        query = "select * from class " 
+        query = "select * from class ORDER BY class_name ASC " 
         cur.execute(query)
         results = cur.fetchall()
         if request.method == 'POST':
@@ -317,7 +328,7 @@ def manageQuestion():
                     
                 #resp.status_code = 204
             return render_template('controlPanelMQ1.html')
-    if 'username' not in session:  
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanelMQ1.html',results=results,res=res)    
 
@@ -332,7 +343,7 @@ def modifyQ():
     d=''
     e=''
     if 'username' in session:
-        query = "select question from question " 
+        query = "select question from question ORDER BY question_id ASC" 
         cur.execute(query)
         res = cur.fetchall()
         print"Tryin to go to deleteq"
@@ -346,7 +357,7 @@ def modifyQ():
                 print "we trying to delete this question"
                 curq = request.form['question']
                 print curq
-                cur.execute("SELECT question_id FROM question WHERE question = '%s'" % (curq))
+                cur.execute("SELECT question_id FROM question WHERE question = %s" , [curq])
                 results = cur.fetchone()
                 print results
                 cur.execute("DELETE FROM answers WHERE question_id = %s",[results[0]] )
@@ -358,7 +369,7 @@ def modifyQ():
                 cur.execute("DELETE FROM question WHERE question_id = %s",[results[0]])
                 conn.commit()
                 
-                query = "select question from question " 
+                query = "select question from question ORDER BY question_id ASC" 
                 cur.execute(query)
                 res = cur.fetchall()
                 
@@ -368,13 +379,14 @@ def modifyQ():
             elif 'modify' in request.form:
                  print"trying to edit question"
                  curq = request.form['question']
-                 cur.execute("select * FROM question WHERE question ilike %s",[curq] )
+                 cur.execute("select * FROM question WHERE question = %s",[curq] )
                  dis=False
                  results = cur.fetchall()
                  for r in results:
                      questionID=r[0]
                      questionType=r[1]
                      question=r[2]
+                     modifyQu.append(question)
                      questionComment=r[3]
                  if questionType==0:
                     cur.execute("select * FROM multiple_choice_question WHERE question_id= %s",[questionID] )
@@ -396,7 +408,7 @@ def modifyQ():
                 
                 
         #return render_template('modifyQ.html')
-    if 'username' not in session:  
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('modifyQ.html',results=results,res=res) 
 
@@ -405,15 +417,75 @@ def modifyQ():
 def modifyQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    comment=''
+    question=''
+    questionID=''
     if 'username' in session:
         print "we are in session"
         if request.method == 'POST':
-            if request.form['submit']=='Cancel':
+            if 'save' in request.form:
+                print cur.mogrify("select * from question where question=%s",[modifyQu[0]])
+                cur.execute("select * from question where question=%s",[modifyQu[0]])
+                res = cur.fetchall()
+                print res
+                for r in res:
+                    questionID=r[0]
+                    questiontype=r[1]
+                    question=r[2]
+                    comment=r[3]
+                
+                if 'optionA' in request.form:
+                    print "Something is wrong"
+                    if(request.form['comment'] and request.form['question'] and request.form['optionA'] and request.form['optionB'] and request.form['optionC'] and request.form['optionD'] and request.form['optionE']):
+                        print "Are we in this statement?"
+                        try:
+                            query = "UPDATE question SET question = %s, admin_comments=%s WHERE question_type=0 and question=%s and question_id=%s ;"
+                            cur.execute(query,[request.form['question'],request.form['comment'],question,questionID])
+                            try:
+                                
+                                #conn.commit()
+                                query = "UPDATE multiple_choice_question SET option_a= %s, option_b= %s , option_c=%s, option_d=%s, option_e=%s WHERE question_id=%s ;"
+                                cur.execute(query,[request.form['optionA'],request.form['optionB'],request.form['optionC'],request.form['optionD'],request.form['optionE'],questionID])
+                                
+                            except:
+                                print cur.mogrify(query,[request.form['optionA'],request.form['optionB'],request.form['optionC'],request.form['optionD'],request.form['optionE'],questionID])
+                                print "Cannot update multiplechoice"
+                                
+                        except:
+                                query = "UPDATE question SET question = %s, admin_comments=%s WHERE question_type=0 and question=%s and question_id=%s ;"
+                                print cur.mogrify(query,[request.form['question'],comment,question,questionID])
+                                print "Cannot update question table"
+                        conn.commit()
+                        mess="Question has been updated successfully!"
+                        notification="notice"
+                        del modifyQu[0]
+                        return  redirect(url_for('modifyQ',mess=mess,notification=notification))
+                    else:
+                            mess="Question has not been updated!"
+                            notification="error"
+                            return  redirect(url_for('modifyQ',mess=mess,notification=notification))
+                else:
+                    print request.form['question']
+                    print ("Short answer questionnnnnnnnnnnnn")
+                    query = "UPDATE question SET question = %s, admin_comments=%s WHERE question=%s and question_id=%s ;"
+                    try:
+                        print "We are updating the comment and the question"
+                        cur.execute(query,[request.form['question'],request.form['comment'],modifyQu[0],questionID])
+                        
+                    except:
+                        print "connat update"
+                    conn.commit()
+                    mess="Question has been updated successfully!"
+                    notification="notice"
+                    del modifyQu[0]
+                    return  redirect(url_for('modifyQ',mess=mess,notification=notification))
+                        
+            elif 'cancel' in request.form:
                  mess="Nothing has been updated!"
                  notification="notice"
                  return  redirect(url_for('modifyQ',mess=mess,notification=notification))
                 
-    if 'username' not in session:  
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('modifyQuestion.html')
     
@@ -437,10 +509,32 @@ def loadimage():
                     print " the image is here now"
                     filename = secure_filename(file.filename)
                     i=filename.find('.')
-                    filename=str(qid[0]+1)+filename[i:]
+                    filename=str(uuid.uuid1())+str(qid[0]+1)+filename[i:]
                     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename) )
                     
                     return filename
+"""
+@app.route('/changeBackground', methods=['GET', 'POST']) 
+def changeBackground():
+    conn=connectToDB()
+    bg =request.files['x']
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if 'username' in session:
+        print "trying to change Background"
+        if request.method == 'POST':
+            try:
+                query = "UPDATE administrator SET background = %s;"
+                cur.execute(query,[bg])
+            except:
+                print cur.mogrify("select count(question_id) from administrator")
+                print "cannot update background!"
+                return "error"
+                        
+        return "pass" """
+
+
+
+
  
 @app.route('/controlPanelImage', methods=['GET', 'POST']) 
 def hiliteimage():
@@ -449,7 +543,7 @@ def hiliteimage():
     print " Hi"
     if 'username' in session:
         return  render_template('controlPanelImage.html')
-    if 'username' not in session:  
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
     return  render_template('controlPanelImage.html')
     
@@ -468,16 +562,16 @@ def answerQuestion():
     if 'username' in session:
         
         print currentClass + currentQuestion + "This is it"
-        query = "SELECT question_id FROM answers WHERE class_code = %s AND status ='display' " % (session['username']) 
-        cur.execute(query)
+        query = "SELECT question_id FROM answers WHERE class_code = %s AND status ='display' " 
+        cur.execute(query,[session['username']])
         results = cur.fetchall()
         print results
         if not results:
-            mess="Your Professor have not displayed any question yet"
+            mess="Your Professor has not displayed any question yet"
             return render_template('answer.html',answers='', mess=mess)
         
-        query = "SELECT question,question_type FROM question WHERE question_id = %s" % (results[0][0])
-        cur.execute(query)
+        query = "SELECT question,question_type FROM question WHERE question_id = %s" 
+        cur.execute(query,[results[0][0]])
         results2 = cur.fetchall()
         print results2
         if not results2:
@@ -485,8 +579,8 @@ def answerQuestion():
             return render_template('answer.html',answers='', mess=mess)
         
         if results2[0][1]==0:
-            query = "SELECT * FROM multiple_choice_question WHERE question_id = %s" % (results[0][0])
-            cur.execute(query)
+            query = "SELECT * FROM multiple_choice_question WHERE question_id = %s"
+            cur.execute(query,results[0][0])
             results3 = cur.fetchall()
             results4 = []
             resultsTemp = results3
@@ -538,7 +632,8 @@ def answerQuestion():
             print answersListE
             
             return redirect(url_for('studentHome'))
-        
+    elif 'username' not in session:  
+        return  redirect(url_for('mainIndex')) 
         
         
     return render_template('answer.html', answers=results2,answers2=results4,shortanswer=shortanswer)
@@ -596,15 +691,15 @@ def answerQuestion2():
     
     cc = 1111
     
-    query = "SELECT question_id FROM answers WHERE class_code = %s AND status = 1" % (cc) 
+    query = "SELECT question_id FROM answers WHERE class_code = %s AND status = 1" 
     #query = "SELECT question_id FROM answers WHERE status = 1 AND class_code = 1234"
-    cur.execute(query)
+    cur.execute(query,[cc])
     results = cur.fetchall()
     #print results
 
 
-    query = "SELECT * FROM question WHERE question_id = %s" % (results[0][0])
-    cur.execute(query)
+    query = "SELECT * FROM question WHERE question_id = %s" 
+    cur.execute(query,[results[0][0]])
     results2 = cur.fetchall()
     #print results2
     
@@ -631,13 +726,25 @@ def menu():
     display=False
     curC=''
     chart=''
+    fmt = "%Y-%m-%d"
+
+    # Current time in UTC
+    now_utc = datetime.now(timezone('UTC'))
+    print now_utc.strftime(fmt)
+    # Convert to US/Pacific time zone
+    now_pacific = now_utc.astimezone(timezone('US/Eastern'))
+    print now_pacific.strftime(fmt)
+    dateT=now_pacific.strftime(fmt)
+    
+    
+    
     
     print " Hi"
     if 'username' in session:
-        query = "select * from class " 
+        query = "select * from class ORDER BY class_name ASC" 
         cur.execute(query)
         results = cur.fetchall()
-        query = "select question from question " 
+        query = "select question from question ORDER BY question_id ASC " 
         cur.execute(query)
         res = cur.fetchall()
         question=''
@@ -653,41 +760,94 @@ def menu():
             print curQ
             curC = request.form.get('className')
             print curC
+            currentQuestion=curQ
+            currentClass=curC
             #on button press
             
             if('display' in request.form ):
               
                 display=True
+                del answersList[:]
                 print "it should be here"
                 #buicom = 'CREATE TABLE tempy(id serial, answer text, PRIMARY KEY (id))'
                 #cur.execute(buicom)
                 # find class code and question code, then change question state to be 1
-                currentQuestion=curQ
-                currentClass=curC
                 cmd1 = "SELECT class_code FROM class WHERE class_name = '%s'" % curC
                 #print cmd1
                 cur.execute(cmd1)
                 ccChange = cur.fetchall()[0][0]
+                classcode=ccChange
                 #print ccChange
                 cmd2 = "SELECT question_id FROM question WHERE question = '%s'" % curQ
                 cur.execute(cmd2)
                 qcChange = cur.fetchall()[0][0]
                 #print qcChange
-                cmd3 = """INSERT INTO answers VALUES('%s', 'display', %s, %s, null)""" % (datetime.date.today(), ccChange, qcChange)
-                cur.execute(cmd3)
+                
+                print dateT
+                print "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+                try:
+                    cmd3 = 'SELECT * FROM answers where class_code = %s and question_id = %s' % (ccChange, qcChange)
+                    cur.execute(cmd3)
+                    test = cur.fetchall()
+                    if  test:
+                        query = "UPDATE answers SET status = 'display', date= '%s' WHERE class_code = %s and question_id=%s ;" % (dateT,ccChange, qcChange)
+                        cur.execute(query)
+                        print "The question already in the table"
+                    else:
+                        query = """INSERT INTO answers VALUES('%s', 'display', %s, %s, null,FALSE)""" % (dateT, ccChange, qcChange)
+                        cur.execute(query)
+
+                except:
+                    print "Could not update answers table"
+                    
+                    #notification="error"
+                    #mess="You cannot display this question, this question has been already displayed to this class"
+                    display=False
+                    return  render_template('menu.html',display=display,classcode=classcode, curC=curC,results=results,res=res,currentQuestion=currentQuestion,currentClass=currentClass)
                 conn.commit()
                 cmd4 = 'SELECT * FROM answers where class_code = %s and question_id = %s' % (ccChange, qcChange)
                 cur.execute(cmd4)
                 conf="<script type='text/javascript'> var submitFormOkay = false; window.onbeforeunload = function() {if (!submitFormOkay){return 'Hey, you should hide the question before going to a different page!';} }</script>"
                 #print cur.fetchall();
-                return  render_template('menu.html',display=display, curC=curC,results=results,res=res,currentQuestion=currentQuestion,currentClass=currentClass,conf=conf)
+                notification="success"
+                mess="The question has been displayed successfully"
+                return  render_template('menu.html',display=display,classcode=classcode, curC=curC,results=results,res=res,currentQuestion=currentQuestion,currentClass=currentClass,conf=conf,mess=mess,notification=notification)
             elif  'hide' in request.form :
                 
                     query = "UPDATE answers SET status = 'undisplay' WHERE status = 'display';" 
                     cur.execute(query)
                     conn.commit()
                     display=False
-                    
+                    print currentQuestion
+                    print currentClass
+                    return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,currentQuestion=currentQuestion,currentClass=currentClass)
+            
+            elif 'shareResult' in request.form:
+                print "trying to share result 1"
+                imgPath=request.form['imgR']
+                print imgPath
+                notification="success"
+                mess="The result has been shared"
+                print currentClass
+                cmd1 = "SELECT class_code FROM class WHERE class_name = '%s'" % currentClass
+                #print cmd1
+                cur.execute(cmd1)
+                ccChange = cur.fetchall()[0][0]
+                #print ccChange
+                cmd2 = "SELECT question_id FROM question WHERE question = '%s'" % currentQuestion
+                cur.execute(cmd2)
+                qcChange = cur.fetchall()[0][0]
+                print dateT
+                try:
+                    cmd3 = "UPDATE answers SET share = True, date='%s', answer_filepath='%s' WHERE question_id=%s and status= 'undisplay' and class_code=%s ;" % (dateT,imgPath,qcChange, ccChange)
+                    cur.execute(cmd3)
+                    print cur.mogrify(cmd3)
+                except:
+                    print "cannot update!!"
+                conn.commit()
+                #UPDATE films SET kind = 'Dramatic' WHERE kind = 'Drama';
+                del answersList[:]
+                return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,mess=mess,notification=notification,currentQuestion=currentQuestion,currentClass=currentClass)   
             elif 'showr' in request.form:
                 query = "SELECT question_type FROM question WHERE question = '%s'" % curQ
                 cur.execute(query)
@@ -737,10 +897,10 @@ def menu():
                     bar_chart.add('Option E',[len(answersListE)])
                     #bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12]) 
                     #chart = bar_chart.render()
-                    filename="static/images/barChart/"+str(qcChange)+"_"+str(curC)+"_"+"bar_chart.svg"
+                    filename="static/images/barChart/"+str(uuid.uuid1())+str(qcChange)+"_"+str(curC)+"_"+"bar_chart.svg"
                     bar_chart.render_to_file(filename)
                     barcarimage=""
-                    return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,filename=filename,barcarimage=barcarimage)
+                    return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,filename=filename,currentQuestion=currentQuestion,currentClass=currentClass,barcarimage=barcarimage)
                 
                 
                 
@@ -754,19 +914,26 @@ def menu():
                         print word
                         answerstext+=word+" "
                         #cnt[word] += 1
-                    wordcloud = WordCloud().generate(answerstext)
-                    fname="static/images/wordcloud/"+str(qcChange)+"_"+str(curC)+"_"+"word_cloud.png"
+                    try:
+                        wordcloud = WordCloud(width=600,height=400).generate(answerstext)
+                    except:
+                        notification="error"
+                        mess="There is no resulte to show"
+                        return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,mess=mess,notification=notification,currentQuestion=currentQuestion,currentClass=currentClass)
+                        
+                        
+                    fname="static/images/wordcloud/"+str(uuid.uuid1())+str(qcChange)+"_"+str(curC)+"_"+"word_cloud.png"
                     wordcloud.to_file(fname)
                     #answersList=[]
                     
                     s=True
-                    return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,fname=fname,s=s)
+                    return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,fname=fname,s=s,currentQuestion=currentQuestion,currentClass=currentClass)
                 
                 #tags = make_tags(get_tag_counts(answerstext), maxsize=80)
                 #create_tag_image(tags, 'static/images/cloud_large.png', size=(300, 600), fontname='Lobster')
                 #webbrowser.open('cloud_large.png')
         return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange)
-    if 'username' not in session:  
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
     return  render_template('menu.html',question=question)
 
@@ -810,9 +977,47 @@ def studentLogin():
 
 @app.route('/studentHome', methods=['GET', 'POST'])
 def studentHome():
-     if 'username' not in session:  
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    empty=True
+    if 'username' in session:
+        print "Trying to display previous question"
+        if request.method == 'POST':
+            empty=False
+            classcode=''
+            if 'browse' in request.form:
+                questionid=request.form['browse']
+                print questionid
+                cur.execute("select * FROM question WHERE question_id = %s",[questionid] )
+                results = cur.fetchall()
+                
+                cur.execute("select * FROM answers WHERE share and class_code=%s and question_id = %s",[session['username'],questionid] )
+                res = cur.fetchall()
+                return render_template('sampleQuestion1.html',res=res,results=results,classcode=classcode,empty=empty)
+        else:
+            try:
+                empty=False
+                print session['username']
+                s=str(session['username'])
+                query = "select DISTINCT * from answers where share=TRUE and class_code=%s ORDER BY date" 
+                cur.execute(query,[session['username']])
+                results = cur.fetchall()
+                classcode=str(results[0][2])
+                return render_template('studentHome.html',results=results,classcode=classcode,empty=empty)
+                
+            except:
+                classcode="nothing"
+                print classcode
+                results=''
+                empty=True
+                return render_template('studentHome.html',results=results,classcode=classcode,empty=empty)
+        
+                
+        
+    elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-     return render_template('studentHome.html')
+        
+    return render_template('studentHome.html')
 
 #placeholder question details pages
 @app.route('/sampleQuestion1', methods=['GET','POST'])

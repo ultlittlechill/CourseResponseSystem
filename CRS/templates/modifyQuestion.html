@@ -39,33 +39,35 @@
         <td><input type="textarea"  name="question" value="{{request.args.get('question', '')}}"/></td>
         </tr>
         <tr>
+            <td>  Answer:  </td><tr></tr>
             {% if request.args.get('dis', '') %}
-        <td>  Answer:  </td><tr></tr>
+        
         <td>  A)  </td>
-        <td><input type="text"  name="option" style="" value="{{request.args.get('a', '')}}"/></td>
+        <td><input type="text"  name="optionA" style="" value="{{request.args.get('a', '')}}"/></td>
         </tr>
         <td>  B)  </td>
-        <td><input type="text"  name="option" style="" value="{{request.args.get('b', '')}}"/></td>
+        <td><input type="text"  name="optionB" style="" value="{{request.args.get('b', '')}}"/></td>
         </tr>
         <td>  C)  </td>
-        <td><input type="text"  name="option" style="" value="{{request.args.get('c', '')}}"/></td>
+        <td><input type="text"  name="optionC" style="" value="{{request.args.get('c', '')}}"/></td>
         </tr>
         <td>  D)  </td>
-        <td><input type="text"  name="option" style="" value="{{request.args.get('d', '')}}"/></td>
+        <td><input type="text"  name="optionD" style="" value="{{request.args.get('d', '')}}"/></td>
         </tr>
         <td>  E)  </td>
-        <td><input type="text"  name="option" style="" value="{{request.args.get('e', '')}}"/></td>
+        <td><input type="text"  name="optionE" style="" value="{{request.args.get('e', '')}}"/></td>
         </tr>
+        {% else %}
         {% endif %}
         <td> Comment:  </td>
-        <td><input type="text"  name="option" style="" value="{{request.args.get('questionComment', '')}}"/></td>
+        <td><input type="text"  name="comment" style="" value="{{request.args.get('questionComment', '')}}"/></td>
         </tr>
         
 
        
         </table>
-        <button type="submit" name="submit" style="color:black;" value="Save"><a>Save  </a></button>&nbsp; &nbsp;
-        <button type="submit" name="submit" style="color:black;" value="Cancel"><a>Cancel  </a></button>&nbsp; &nbsp;
+        <button type="submit" name="save" style="color:black;" value="Save"><a>Save  </a></button>&nbsp; &nbsp;
+        <button type="submit" name="cancel" style="color:black;" value="Cancel"><a>Cancel  </a></button>&nbsp; &nbsp;
     </form>
 </fieldset>
    </div> 

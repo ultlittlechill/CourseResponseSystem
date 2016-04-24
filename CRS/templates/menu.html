@@ -20,38 +20,39 @@
     <div id="mngc">
         
         
-        <div style="width:400px; height:200px;">
+        <div style="width:400px;">
         
 <fieldset class="sf" style="color:black; border-width:3px; height:90%; "  >
                          <legend ><h4>Administer Question</h4></legend>
                          <div>
                              <form method="post" action ="{{url_for('menu')}}">
                              <div class="class">
-                             <select name = "className" {% if display %} value="{{curC}}" {% endif %} class = "selectpicker form-control">
+                             <select name = "className"  class = "selectpicker form-control">
                              {% for r in results %}
 
-                                      <option name="classn" value="{{r[1]}}">{{r[1]}}</option>
+                                      <option name="classn" value="{{r[1]}}" {% if currentClass==r[1] %} selected{% endif %}>{{r[1]}}</option>
 
                         {% endfor %}
                              </select>
                             
                             <!--<form method = 'POST' action = '/menu'>-->
-                                <select name="question" {% if display %}value="{{curQ}}"{% endif %} class="selectpicker form-control">
+                                <select name="question"  class="selectpicker form-control">
+                                    
                                  {% for i in res %}
                                       
-                                      <option   value="{{i[0]}}">{{i[0]}} </option>
+                                      <option   value="{{i[0]}}" {% if currentQuestion==i[0] %} selected{% endif %}>{{i[0]}} </option>
                                       
                                 {% endfor %}
                                  </select>
                                  
                              </div>
+                                     <button onclick="" type="submit" name="display" value="Display" id="display"><a>Display</a></button>
+                               <!--      <input onclick="" type="submit" name="display" value="Display" id="display"/> -->
+                                     
+                                     
+                                     <button onclick="" type="submit" style="" value="Show Result" name="showr" id="ShowR"><a>Show Result</a></button>
+                               <!--      <input onclick="" type="submit" style="" value="Show Result" name="showr" id="ShowR"/>-->
                              
-                                     <input onclick="" type="submit" name="display" value="Display" id="display"/>
-                                     
-                                     
-                                     <input onclick="" type="button" style="display:none" value="Share Result" id="shareR"/>
-                                     <input onclick="" type="submit" style="" value="Show Result" name="showr" id="ShowR"/>
-                             </form>
                             <!-- <img src='static/images/cloud_large.png' alt='' /> -->
                          </div>
                          <div id=result>
@@ -60,17 +61,34 @@
                          </div>
   
   {% if display or chart %}
+  
 <fieldset class="sf" style="color:black; border-width:3px;  "  >
+    
                          <legend ><h4>Displayed Question</h4></legend>
-                         <form method="post" action ="{{url_for('menu')}}">
+                         
                              
+                             
+                    <table>
+                        <tr>
+                            <td>
+                        
+                     
+                    Class Name:</td>     <td> {{curC}}<br>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>
+                    Class Code:</td>    <td> {{classcode}}<br>
+                    </td>
+                    </tr>
+                    </table> 
+                    &nbsp; &nbsp;<button type="submit" onclick="submitFormOkay = true;" name="hide" value="Hide" id="hide"><a>Hide</a></button>  <!-- <input onclick="submitFormOkay = true;" type="submit" style="display" name="hide" value="Hide" id="hide"/>-->
                          
-                         {{curC}}:&nbsp; &nbsp;<input onclick="submitFormOkay = true;" type="submit" style="display" name="hide" value="Hide" id="hide"/>
-                         
-                         </form>
+                        
 </fieldset>
 {% endif %}                       
-                      
+                  
+                             
     
 </fieldset>
 
@@ -79,24 +97,32 @@
    </div> 
 </div>
 {% if filename %}
-<div style="width:500px;height:500px;">
+
+  <button type="submit" name="shareResult"  style="width:600px;height:50px;" id="shareResult"><a>Share Result </a></button>
+  
+
+<div style="width:600px;height:500px;">
           
-        <object type="image/svg+xml"data='{{filename}}'></object>
+        <object type="image/svg+xml"data='{{filename}}' name="imgR" value="{{filename}}"></object>
         
 
-</div>
+</div><input type="text" name="imgR" style="visibility: hidden;" value="{{filename}}" id="imgR"/>
  {% endif %}
  {% if s %}
-<div style="width:500px;height:500px;">
+   <button type="submit"   style="width:600px;height:60px;" name="shareResult" id="shareResult"><a>Share Result </a></button>
+
+<div style="width:600px;height:400px;">
     
-        <img src="{{fname}}"></img>      
+        <img src="{{fname}}" name="imgR" value="{{fname}}"></img>      
         
         
 
-</div>
+</div><input type="text" name="imgR" style="visibility: hidden;" value="{{fname}}" id="imgR"/>
+
+
  {% endif %}
  
-    
+  </form>  
 
 <script type="text/javascript" >
     function showres() 

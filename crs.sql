@@ -5,6 +5,7 @@ CREATE DATABASE crs1;
 CREATE TABLE administrator (
     email varchar(35),
     password varchar(35),
+    background text,
     PRIMARY KEY (email));
 
 INSERT INTO administrator VALUES ('test@test.com', 'password');
@@ -12,6 +13,7 @@ INSERT INTO administrator VALUES ('test@test.com', 'password');
 CREATE TABLE class (
     class_code int,
     class_name varchar(35),
+    background text references administrator(background),
     PRIMARY KEY (class_code));
 
 INSERT INTO class VALUES (1234, 'History');
@@ -52,8 +54,9 @@ CREATE TABLE answers (
     status varchar(35),
     class_code int references class(class_code),
     question_id int references question(question_id),
-    answer_filepath text);
+    answer_filepath text,
+    share boolean;)
     
-INSERT INTO answers VALUES('2016-1-18', 'undisplay', 1234, 1, 'bloop');
-INSERT INTO answers VALUES(null, 'undisplay', 1234, 1, null);
-INSERT INTO answers VALUES(null, 'undisplay', 1111, 2, null);
+INSERT INTO answers VALUES('2016-1-18', 'undisplay', 1234, 1, 'bloop',FALSE);
+INSERT INTO answers VALUES(null, 'undisplay', 1234, 1, null,FALSE);
+INSERT INTO answers VALUES(null, 'undisplay', 1111, 2, null,FALSE);

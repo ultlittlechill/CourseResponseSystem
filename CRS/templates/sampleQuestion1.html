@@ -17,44 +17,44 @@
 <div id="mngc">
     <fieldset class="sf" style="color:Black; border-width:3px; "  >
     <table>
+        {% for r in results %}
         <tr>
             <td>
                 <h3>Question:</h3>
             </td>
             <td>
-                Can the Great Wall of China be seen from space?
+                {{r[2]}}
             </td>
         </tr>
         <tr>
             <td>
-                <h3>Answers:</h3>
+                <h3>Answer:</h3>
             </td>
             <td>
-                A: Yes
-                <br>
-                B: No
-                <br>
-                C: Only from low orbit
-                <br>
-                D: Only during spring
+                {{r[3]}}
             </td>
         </tr>
-        <tr>
+      <!--  <tr>
             <td>
                 <h3>Comments:</h3>
             </td>
             <td>
                 The correct answer is B. The Great Wall of China is big, but it cannot actually be seen from space.
             </td>
-        </tr>
+        </tr>-->{% endfor %}
+        {% for i in res %}
         <tr>
             <td>
                 <h3>Visualized Results:</h3>
             </td>
             <td>
-                <img src="static/images/bar.png" alt=""  />
+                <div style="width:600px;height:500px;">
+                <img src="{{i[4]}}" name="imgR" value="{{Visualized_image}}" ></img>
+                </div>
+              <!--  <img src="static/images/bar.png" alt=""  />-->
             </td>
         </tr>
+        {% endfor %}
     </table>
 </div>
 

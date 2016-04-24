@@ -52,6 +52,43 @@ imgT.src = "static/images/uploads/"+pic;
   xhttp.send(data);
 }
     
+    
+    
+    
+    
+    
+function changeBackground(x) {
+   // alert("hello");
+  var xhttp = new XMLHttpRequest();
+  
+   //var b= x;
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+       var background = xhttp.responseText;
+       localStorage.setItem("qimg",background);
+       //alert(localStorage.getItem("qimg"));
+       //var can=document.getElementById('canvas');
+       //var imageSrc=document.getElementById('mapImg');
+       //can.style.backgroundImage= "url('./static/images/uploads/"+pic+"')";
+       //can.style.backgroundRepeat="no-repeat";
+      // alert("im here");
+      // document.getElementById("mapImg").src = "static/images/uploads/"+pic;
+       //document.getElementById("mapImage").src = "static/images/uploads/"+pic;
+                     
+
+       
+    }
+  };
+  
+
+ var x=document.getElementById('bg');
+
+  xhttp.open("POST", "changeBackground", true);
+  xhttp.send(x);
+}    
+    
+    
+    
   </script>
   
   
@@ -98,6 +135,7 @@ imgT.src = "static/images/uploads/"+pic;
   </div>
   
   <div id="infor" >
+    {% if notification =='error' %}<div class="alert-box error"><span>error: </span>{{mess}}</div>{% endif %}
 {% if notification =='success' %}<div class="alert-box success"><span>success: </span>{{mess}}</div>{% endif %}
 {% if request.args.get('notification', '') =='codeError' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
 {% if request.args.get('notification', '') =='error' %}<div class="alert-box error"><span>error: </span>{{request.args.get('mess', '')}}</div>{% endif %}
@@ -151,6 +189,7 @@ imgT.src = "static/images/uploads/"+pic;
 			</select>
 			
 			<button onclick="changeBg();" type="button">Apply</button>
+		  <!--changeBackground(this.value);-->
 			
 		</div>
 

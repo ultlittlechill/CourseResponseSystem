@@ -51,11 +51,18 @@ document.write("<b>Hi Boy</b>");
 
 <form method = 'POST' action = '/answerQuestion'>
 
+<table>
+    
 
     {% for a in answers2 %}
+    <tr>
+        <td>
+    
         <input type="radio" name="option" value="{{a}}" required="required" >{{a}}</input>
-        <br>
+        </td>
+        </tr>
     {% endfor %}
+    </table>
     {{shortanswer|safe}}
 
     <br>

@@ -20,8 +20,19 @@
         <div style="width:400px; height:250px;">
         <fieldset class="sf" style="color:black; border-width:3px; height:90%;"  >
             <legend ><h4>Previous Questions</h4></legend>
+            <div id="mngc">
+                {% if empty or (not (classcode == session['username']) ) %}
+                <p>Your professor has not </p>
+                <p>shared any question yet</p>
+                {% endif %}
+                <form method="Post" action="{{url_for('studentHome')}}">
+                    {% for res in results%}
+                  {% if classcode == session['username'] %}  <button type="submit" name="browse"  value="{{res[3]}}"><a>{{res[0]}}</a></button><br> {% endif %}
+                    {% endfor %}
+                </form>
+                </div>
 
-                <form method="post" action="{{url_for('sampleQuestion1')}}">
+             <!--   <form method="post" action="{{url_for('sampleQuestion1')}}">
                         <button type="submit" name="submit" style="color:black;" value="1/22/2016"><a>1/22/2016</a></button>&nbsp; &nbsp;
                 </form>
                 <form method="post" action="{{url_for('sampleQuestion2')}}">
@@ -29,7 +40,7 @@
                 </form>
                 <form method="post" action="{{url_for('sampleQuestion3')}}">
                     <button type="submit" name="submit" style="color:black;" value="2/26/2016"><a>2/26/2016</a></button>&nbsp; &nbsp;
-                </form>
+                </form>-->
         </fieldset>
 
         </div>
