@@ -26,7 +26,7 @@
                 {{r[2]}}
             </td>
         </tr>
-        {% if results[1] == 0 %}
+        {% if results[0][1] == 0 %}
         <tr>
             <td>
                 Answer Choices: 
@@ -35,7 +35,7 @@
                 {% for i in range(5) %}
                 Option {{multipleChoiceLabels[i]}}: {{multipleChoiceResults[i+1]}}
                 <br><br>
-                {% endfor }
+                {% endfor %}
             </td>
         </tr>
         <tr>
