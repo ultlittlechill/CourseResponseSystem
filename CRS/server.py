@@ -163,7 +163,9 @@ def delete():
         if request.method == 'POST':
             if request.form['submit']=='Delete':
                 classname = request.form['classn']
-                cur.execute("DELETE FROM class WHERE class_name = %s",[classname] )
+                classCode = request.form['classCode']
+                cur.execute("DELETE FROM answers WHERE class_code = %s",[classCode] )
+                cur.execute("DELETE FROM class WHERE class_code = %s",[classCode] )
       
                 conn.commit()
                 mess="Your class has been deleted!"
@@ -580,7 +582,7 @@ def answerQuestion():
         
         if results2[0][1]==0:
             query = "SELECT * FROM multiple_choice_question WHERE question_id = %s"
-            cur.execute(query,results[0][0])
+            cur.execute(query,[results[0][0]])
             results3 = cur.fetchall()
             results4 = []
             resultsTemp = results3
