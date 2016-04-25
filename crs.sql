@@ -9,7 +9,7 @@ CREATE TABLE administrator (
     background text,
     PRIMARY KEY (email));
 
-INSERT INTO administrator VALUES ('test@test.com', 'password');
+INSERT INTO administrator VALUES ('test@test.com', 'password', 'background-image:#10223a;');
 
 CREATE TABLE class (
     class_code int,
