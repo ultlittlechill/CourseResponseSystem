@@ -357,7 +357,9 @@ def manageQuestion():
                 query = "select question from question " 
                 cur.execute(query)
                 res = cur.fetchall()
-                return render_template('controlPanelMQ1.html',results=results,res=res,st=st)
+                mess="Your question has been added successfully !!"
+                notification="success"
+                return render_template('controlPanelMQ1.html',results=results,res=res,st=st,mess=mess,notification=notification)
             
             elif('type' in request.form and (request.form['type']=="Short Answer")):
                 
@@ -372,9 +374,10 @@ def manageQuestion():
                     conn.rollback()
                 conn.commit()
             
-                    
+            mess="Your question has been added successfully !!"
+            notification="success"        
                 #resp.status_code = 204
-            return render_template('controlPanelMQ1.html',st=st)
+            return render_template('controlPanelMQ1.html',st=st,mess=mess,notification=notification)
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
     return render_template('controlPanelMQ1.html',results=results,res=res,st=st)    
@@ -483,7 +486,7 @@ def modifyQuestion():
         print "we are in session"
         if request.method == 'POST':
             if 'save' in request.form:
-                print cur.mogrify("select * from question where question=%s",[modifyQu[0]])
+                #print cur.mogrify("select * from question where question=%s",[modifyQu[0]])
                 cur.execute("select * from question where question=%s",[modifyQu[0]])
                 res = cur.fetchall()
                 print res
@@ -509,6 +512,7 @@ def modifyQuestion():
                             except:
                                 print cur.mogrify(query,[request.form['optionA'],request.form['optionB'],request.form['optionC'],request.form['optionD'],request.form['optionE'],questionID])
                                 print "Cannot update multiplechoice"
+                                print modifyQu[:]
                                 
                         except:
                                 query = "UPDATE question SET question = %s, admin_comments=%s WHERE question_type=0 and question=%s and question_id=%s ;"
@@ -517,7 +521,7 @@ def modifyQuestion():
                         conn.commit()
                         mess="Question has been updated successfully!"
                         notification="notice"
-                        del modifyQu[0]
+                        del modifyQu[:]
                         return  redirect(url_for('modifyQ',mess=mess,notification=notification,st=st))
                     else:
                             mess="Question has not been updated!"
@@ -536,12 +540,13 @@ def modifyQuestion():
                     conn.commit()
                     mess="Question has been updated successfully!"
                     notification="notice"
-                    del modifyQu[0]
+                    del modifyQu[:]
                     return  redirect(url_for('modifyQ',mess=mess,notification=notification,st=st))
                         
             elif 'cancel' in request.form:
                  mess="Nothing has been updated!"
                  notification="notice"
+                 del modifyQu[:]
                  return  redirect(url_for('modifyQ',mess=mess,notification=notification,st=st))
                 
     elif 'username' not in session:  
