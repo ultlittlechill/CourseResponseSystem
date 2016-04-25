@@ -1029,7 +1029,7 @@ def menu():
                         wordcloud = WordCloud(width=600,height=400).generate(answerstext)
                     except:
                         notification="error"
-                        mess="There is no resulte to show"
+                        mess="There is no result to show"
                         return  render_template('menu.html',st=st,display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,mess=mess,notification=notification,currentQuestion=currentQuestion,currentClass=currentClass)
                         
                         
