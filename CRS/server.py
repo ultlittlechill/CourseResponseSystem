@@ -71,13 +71,20 @@ def connectToDB():
 def mainIndex():
     conn=connectToDB()
     cur= conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     if 'username' in session:
         if not session['username'].isdigit() :
-            return redirect(url_for('menu'))
+            return redirect(url_for('menu',st=st))
         if session['username'].isdigit():
-            return redirect(url_for('studentHome'))
+            return redirect(url_for('studentHome',st=st))
+        
     if 'username' not in session:
-        return render_template('index.html')
+        return render_template('index.html',st=st)
     
     
 
@@ -86,9 +93,15 @@ def login():
     print "We are here"
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     if 'username' in session:
         username_session = escape(session['username']).capitalize()
-        return redirect(url_for('controlPanel'))
+        return redirect(url_for('controlPanel',st=st))
     if request.method == 'POST':
             username = request.form['username']
             currentUser = username
@@ -103,14 +116,14 @@ def login():
             except:
                 notification="password"
                 mess="The email or password you inputted is incorrect!"
-                return redirect(url_for('login',mess=mess,notification=notification))
+                return redirect(url_for('login',mess=mess,notification=notification,st=st))
 
             r=cur.fetchall()
             if r:
                 session['username'] = request.form['username']
-                return redirect(url_for('menu'))
+                return redirect(url_for('menu',st=st))
          #return redirect(url_for('mainIndex',user=currentUser,c=ch))
-    return render_template('login.html')
+    return render_template('login.html',st=st)
 
 
 
@@ -126,6 +139,12 @@ def logout():
 def controlPanel():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     i=1
     if 'username' in session:
         query = "select * from class ORDER BY class_name " 
@@ -144,7 +163,7 @@ def controlPanel():
                 
                 mess="This class code already exists!"
                 notification="error"
-                return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+                return  redirect(url_for('controlPanel',mess=mess,notification=notification,st=st))
       
             
             query = "select * from class ORDER BY class_name " 
@@ -153,15 +172,21 @@ def controlPanel():
             results = cur.fetchall()
             mess="Your class has been created"
             notification="success"
-            return  redirect(url_for('controlPanel',mess=mess,notification=notification))    
+            return  redirect(url_for('controlPanel',mess=mess,notification=notification,st=st))    
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('controlPanel.html',results=results)
+    return render_template('controlPanel.html',results=results,st=st)
 
 @app.route('/controlPanelD', methods=['GET', 'POST'])
 def delete():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     if 'username' in session:
         query = "select * from class ORDER BY class_name " 
         cur.execute(query)
@@ -183,21 +208,20 @@ def delete():
                 print query
                 cur.execute(query)
                 results = cur.fetchall()
-                return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+                return  redirect(url_for('controlPanel',mess=mess,notification=notification,st=st))
             elif request.form['submit']=='Edit':
                  classname = request.form['classn']
-                 cur.execute("select * FROM class WHERE class_name = %s",[classname] )
+                 cur.execute("select class_name FROM class WHERE class_code = %s",[classname] )
                  results = cur.fetchall()
                  for r in results:
-                     name=r[1]
-                     code=r[0]
-                     print name,code
+                     name=r[0]
+                     print name
                      
-                 return redirect(url_for('edit',code=code,name=name))
+                 return redirect(url_for('edit',code=classCode,name=name,st=st))
                 
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('controlPanel.html',results=results)
+    return render_template('controlPanel.html',results=results,st=st)
 
 
 
@@ -205,6 +229,12 @@ def delete():
 def edit():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     if 'username' in session:
         if request.method == 'POST':
             if request.form['submit']=='Save':
@@ -220,25 +250,31 @@ def edit():
                     conn.commit()
                     mess="Your class info has been updated!"
                     notification="success"
-                    return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+                    return  redirect(url_for('controlPanel',mess=mess,notification=notification,st=st))
                 else:
                     mess="Invalid inputted!"
                     notification="error"
-                    return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+                    return  redirect(url_for('controlPanel',mess=mess,notification=notification,st=st))
             elif request.form['submit']=='Cancel':
                  mess="Nothing has been updated!"
                  notification="notice"
-                 return  redirect(url_for('controlPanel',mess=mess,notification=notification))
+                 return  redirect(url_for('controlPanel',mess=mess,notification=notification,st=st))
                 
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('controlPanelE.html')
+    return render_template('controlPanelE.html',st=st)
 
 
 @app.route('/controlPanelMQ1', methods=['GET', 'POST'])
 def manageQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     mess=''
     notification=''
     if 'username' in session:
@@ -321,7 +357,7 @@ def manageQuestion():
                 query = "select question from question " 
                 cur.execute(query)
                 res = cur.fetchall()
-                return render_template('controlPanelMQ1.html',results=results,res=res)
+                return render_template('controlPanelMQ1.html',results=results,res=res,st=st)
             
             elif('type' in request.form and (request.form['type']=="Short Answer")):
                 
@@ -338,16 +374,22 @@ def manageQuestion():
             
                     
                 #resp.status_code = 204
-            return render_template('controlPanelMQ1.html')
+            return render_template('controlPanelMQ1.html',st=st)
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('controlPanelMQ1.html',results=results,res=res)    
+    return render_template('controlPanelMQ1.html',results=results,res=res,st=st)    
 
 
 @app.route('/modifyQ', methods=['GET', 'POST'])
 def modifyQ():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     a=''
     b=''
     c=''
@@ -386,7 +428,7 @@ def modifyQ():
                 
                 mess="Your question has been deleted!"
                 notification="success"
-                return render_template('modifyQ.html',mess=mess,notification=notification,results=results,res=res)
+                return render_template('modifyQ.html',mess=mess,notification=notification,results=results,res=res,st=st)
             elif 'modify' in request.form:
                  print"trying to edit question"
                  curq = request.form['question']
@@ -409,11 +451,11 @@ def modifyQ():
                         c=i[3]
                         d=i[4]
                         e=i[5]
-                        return redirect(url_for('modifyQuestion',a=a,b=b,c=c,d=d,e=e,question=question,questionComment=questionComment,questionType=questionType,dis=dis))
+                        return redirect(url_for('modifyQuestion',st=st,a=a,b=b,c=c,d=d,e=e,question=question,questionComment=questionComment,questionType=questionType,dis=dis))
                  elif questionType==1:
                      print "short answer question"
                      #print name,code
-                     return redirect(url_for('modifyQuestion',question=question,questionComment=questionComment,questionType=questionType))
+                     return redirect(url_for('modifyQuestion',st=st,question=question,questionComment=questionComment,questionType=questionType))
                      
                  
                 
@@ -421,13 +463,19 @@ def modifyQ():
         #return render_template('modifyQ.html')
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('modifyQ.html',results=results,res=res) 
+    return render_template('modifyQ.html',results=results,res=res,st=st) 
 
 
 @app.route('/modifyQuestion', methods=['GET', 'POST'])
 def modifyQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     comment=''
     question=''
     questionID=''
@@ -470,11 +518,11 @@ def modifyQuestion():
                         mess="Question has been updated successfully!"
                         notification="notice"
                         del modifyQu[0]
-                        return  redirect(url_for('modifyQ',mess=mess,notification=notification))
+                        return  redirect(url_for('modifyQ',mess=mess,notification=notification,st=st))
                     else:
                             mess="Question has not been updated!"
                             notification="error"
-                            return  redirect(url_for('modifyQ',mess=mess,notification=notification))
+                            return  redirect(url_for('modifyQ',mess=mess,notification=notification,st=st))
                 else:
                     print request.form['question']
                     print ("Short answer questionnnnnnnnnnnnn")
@@ -489,16 +537,16 @@ def modifyQuestion():
                     mess="Question has been updated successfully!"
                     notification="notice"
                     del modifyQu[0]
-                    return  redirect(url_for('modifyQ',mess=mess,notification=notification))
+                    return  redirect(url_for('modifyQ',mess=mess,notification=notification,st=st))
                         
             elif 'cancel' in request.form:
                  mess="Nothing has been updated!"
                  notification="notice"
-                 return  redirect(url_for('modifyQ',mess=mess,notification=notification))
+                 return  redirect(url_for('modifyQ',mess=mess,notification=notification,st=st))
                 
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
-    return render_template('modifyQuestion.html')
+    return render_template('modifyQuestion.html',st=st)
     
 
 
@@ -507,6 +555,12 @@ def modifyQuestion():
 def loadimage():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     if 'username' in session:
         if request.method == 'POST':
             cur.execute("select count(question_id) from question")
@@ -524,24 +578,28 @@ def loadimage():
                     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename) )
                     
                     return filename
-"""
+
 @app.route('/changeBackground', methods=['GET', 'POST']) 
 def changeBackground():
     conn=connectToDB()
-    bg =request.files['x']
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
     if 'username' in session:
+        bg =request.form.get('bg')
+        print bg
         print "trying to change Background"
-        if request.method == 'POST':
+        if bg:
+            #bg =request.form.get('backgroundA')
             try:
                 query = "UPDATE administrator SET background = %s;"
                 cur.execute(query,[bg])
+                
             except:
                 print cur.mogrify("select count(question_id) from administrator")
                 print "cannot update background!"
                 return "error"
-                        
-        return "pass" """
+            conn.commit()        
+        return bg 
 
 
 
@@ -551,12 +609,18 @@ def changeBackground():
 def hiliteimage():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     print " Hi"
     if 'username' in session:
-        return  render_template('controlPanelImage.html')
+        return  render_template('controlPanelImage.html',st=st)
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
-    return  render_template('controlPanelImage.html')
+    return  render_template('controlPanelImage.html',st=st)
     
 
 
@@ -566,6 +630,12 @@ def hiliteimage():
 def answerQuestion():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     results4 = []
     shortanswer=''
     results2=''
@@ -579,7 +649,7 @@ def answerQuestion():
         print results
         if not results:
             mess="Your Professor has not displayed any question yet"
-            return render_template('answer.html',answers='', mess=mess)
+            return render_template('answer.html',answers='', mess=mess,st=st)
         
         query = "SELECT question,question_type FROM question WHERE question_id = %s" 
         cur.execute(query,[results[0][0]])
@@ -587,7 +657,7 @@ def answerQuestion():
         print results2
         if not results2:
             mess="Your Professor has not displayed a question yet"
-            return render_template('answer.html',answers='', mess=mess)
+            return render_template('answer.html',answers='', mess=mess,st=st)
         
         if results2[0][1]==0:
             
@@ -643,12 +713,12 @@ def answerQuestion():
                 
             print answersListE
             
-            return redirect(url_for('studentHome'))
+            return redirect(url_for('studentHome',st=st))
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
         
         
-    return render_template('answer.html', answers=results2,answers2=results4,shortanswer=shortanswer)
+    return render_template('answer.html', answers=results2,answers2=results4,shortanswer=shortanswer,st=st)
     """
     # check current class (cc)
     cc = session['username']
@@ -700,6 +770,12 @@ def answerQuestion():
 def answerQuestion2():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     
     cc = 1111
     
@@ -720,14 +796,14 @@ def answerQuestion2():
             #print 'I did it!'
             print request.form['answer']
             #make this (below) student home page
-            return redirect(url_for('studentHome'))
+            return redirect(url_for('studentHome',st=st))
     
     #add to database from here
     
     qImage = "questionImages/math2.png"
     #qImage = None
     
-    return render_template('answer2.html', answers=results2, qImage=qImage)
+    return render_template('answer2.html', answers=results2, qImage=qImage,st=st)
     
 
 
@@ -735,6 +811,13 @@ def answerQuestion2():
 def menu():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     display=False
     curC=''
     chart=''
@@ -815,7 +898,7 @@ def menu():
                     #notification="error"
                     #mess="You cannot display this question, this question has been already displayed to this class"
                     display=False
-                    return  render_template('menu.html',display=display,classcode=classcode, curC=curC,results=results,res=res,currentQuestion=currentQuestion,currentClass=currentClass)
+                    return  render_template('menu.html',st=st,display=display,classcode=classcode, curC=curC,results=results,res=res,currentQuestion=currentQuestion,currentClass=currentClass)
                 conn.commit()
                 cmd4 = 'SELECT * FROM answers where class_code = %s and question_id = %s' % (ccChange, qcChange)
                 cur.execute(cmd4)
@@ -823,7 +906,7 @@ def menu():
                 #print cur.fetchall();
                 notification="success"
                 mess="The question has been displayed successfully"
-                return  render_template('menu.html',display=display,classcode=classcode, curC=curC,results=results,res=res,currentQuestion=currentQuestion,currentClass=currentClass,conf=conf,mess=mess,notification=notification)
+                return  render_template('menu.html',st=st,display=display,classcode=classcode, curC=curC,results=results,res=res,currentQuestion=currentQuestion,currentClass=currentClass,conf=conf,mess=mess,notification=notification)
             elif  'hide' in request.form :
                 
                     query = "UPDATE answers SET status = 'undisplay' WHERE status = 'display';" 
@@ -832,7 +915,7 @@ def menu():
                     display=False
                     print currentQuestion
                     print currentClass
-                    return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,currentQuestion=currentQuestion,currentClass=currentClass)
+                    return  render_template('menu.html',st=st,display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,currentQuestion=currentQuestion,currentClass=currentClass)
             
             elif 'shareResult' in request.form:
                 print "trying to share result 1"
@@ -864,7 +947,7 @@ def menu():
                 del answersListC[:]
                 del answersListD[:]
                 del answersListE[:]
-                return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,mess=mess,notification=notification,currentQuestion=currentQuestion,currentClass=currentClass)   
+                return  render_template('menu.html',st=st,display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,mess=mess,notification=notification,currentQuestion=currentQuestion,currentClass=currentClass)   
             elif 'showr' in request.form:
                 query = "SELECT question_type FROM question WHERE question = '%s'" % curQ
                 cur.execute(query)
@@ -928,7 +1011,7 @@ def menu():
                         del answersListD[0]
                     for i in answersListE:
                         del answersListE[0]"""
-                    return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,filename=filename,currentQuestion=currentQuestion,currentClass=currentClass,barcarimage=barcarimage)
+                    return  render_template('menu.html',st=st,display=display, curC=curC,results=results,res=res,question=question,filename=filename,currentQuestion=currentQuestion,currentClass=currentClass,barcarimage=barcarimage)
                 
                 
                 
@@ -947,7 +1030,7 @@ def menu():
                     except:
                         notification="error"
                         mess="There is no resulte to show"
-                        return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,mess=mess,notification=notification,currentQuestion=currentQuestion,currentClass=currentClass)
+                        return  render_template('menu.html',st=st,display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange,mess=mess,notification=notification,currentQuestion=currentQuestion,currentClass=currentClass)
                         
                         
                     fname="static/images/wordcloud/"+str(uuid.uuid1())+str(qcChange)+"_"+str(curC)+"_"+"word_cloud.png"
@@ -955,15 +1038,15 @@ def menu():
                     #answersList=[]
                     
                     s=True
-                    return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,fname=fname,s=s,currentQuestion=currentQuestion,currentClass=currentClass)
+                    return  render_template('menu.html',st=st,display=display, curC=curC,results=results,res=res,question=question,fname=fname,s=s,currentQuestion=currentQuestion,currentClass=currentClass)
                 
                 #tags = make_tags(get_tag_counts(answerstext), maxsize=80)
                 #create_tag_image(tags, 'static/images/cloud_large.png', size=(300, 600), fontname='Lobster')
                 #webbrowser.open('cloud_large.png')
-        return  render_template('menu.html',display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange)
+        return  render_template('menu.html',st=st,display=display, curC=curC,results=results,res=res,question=question,qcChange=qcChange)
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex')) 
-    return  render_template('menu.html',question=question)
+    return  render_template('menu.html',st=st,question=question)
 
 
 
@@ -971,11 +1054,17 @@ def menu():
 def studentLogin():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     #reusing the username variable to store the class code
     #it is a number, but it is stored as a string type
     if 'username' in session:
          username_session = escape(session['username']).capitalize()
-         return redirect(url_for('studentHome'))
+         return redirect(url_for('studentHome',st=st))
     if request.method == 'POST':
             username = request.form['class_code']
             currentUser = username
@@ -985,17 +1074,17 @@ def studentLogin():
             except:
                 notification="codeError"
                 mess="The class code you inputted is incorrect!"
-                return redirect(url_for('studentLogin',mess=mess,notification=notification))
+                return redirect(url_for('studentLogin',mess=mess,notification=notification,st=st,))
             if r:
                 session['username'] = request.form['class_code']
-                return redirect(url_for('studentHome'))
+                return redirect(url_for('studentHome',st=st))
             else:
                 notification="codeError"
                 mess="The class code you inputted is incorrect!"
-                return redirect(url_for('studentLogin',mess=mess,notification=notification))
+                return redirect(url_for('studentLogin',st=st,mess=mess,notification=notification))
          #return redirect(url_for('mainIndex',user=currentUser,c=ch))
     
-    return render_template('studentLogin.html')
+    return render_template('studentLogin.html',st=st)
 
 
 
@@ -1007,6 +1096,12 @@ def studentLogin():
 def studentHome():
     conn=connectToDB()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     empty=True
     if 'username' in session:
         print "Trying to display previous question"
@@ -1028,7 +1123,7 @@ def studentHome():
                 
                 cur.execute("select * FROM answers WHERE share and class_code=%s and question_id = %s",[session['username'],questionid] )
                 res = cur.fetchall()
-                return render_template('sampleQuestion1.html',res=res,results=results,classcode=classcode,empty=empty,
+                return render_template('sampleQuestion1.html',st=st,res=res,results=results,classcode=classcode,empty=empty,
                                         multipleChoiceLabels={0:'A',1:'B',2:'C',3:'D',4:'E'},multipleChoiceResults=multipleChoiceResults)
         else:
             try:
@@ -1039,32 +1134,40 @@ def studentHome():
                 cur.execute(query,[session['username']])
                 results = cur.fetchall()
                 classcode=str(results[0][2])
-                return render_template('studentHome.html',results=results,classcode=classcode,empty=empty)
+                return render_template('studentHome.html',st=st,results=results,classcode=classcode,empty=empty)
                 
             except:
                 classcode="nothing"
                 print classcode
                 results=''
                 empty=True
-                return render_template('studentHome.html',results=results,classcode=classcode,empty=empty)
+                return render_template('studentHome.html',st=st,results=results,classcode=classcode,empty=empty)
         
                 
         
     elif 'username' not in session:  
         return  redirect(url_for('mainIndex'))
         
-    return render_template('studentHome.html')
+    return render_template('studentHome.html',st=st)
 
 #placeholder question details pages
 @app.route('/sampleQuestion1', methods=['GET','POST'])
 def sampleQuestion1():
+    conn=connectToDB()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = "select background from administrator "
+    print query
+    cur.execute(query)
+    results = cur.fetchall()
+    background=results[0][0]
+    st="<style>body {background:"+background+";}</style>"
     bar_chart = pygal.HorizontalStackedBar()
     bar_chart.title = "Remarquable sequences"
     bar_chart.x_labels = map(str, range(11))
     bar_chart.add('Fibonacci', [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55])
     bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12]) 
     chart = bar_chart.render()
-    return render_template('sampleQuestion1.html',chart=chart)
+    return render_template('sampleQuestion1.html',chart=chart,st=st)
     
 @app.route('/sampleQuestion2', methods=['GET','POST'])
 def sampleQuestion2():

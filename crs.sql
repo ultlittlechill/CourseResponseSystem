@@ -29,7 +29,7 @@ CREATE TABLE question (
     
 INSERT INTO question VALUES (DEFAULT, 0, 'What is 2 + 2?', 'This question is a math question.', 'file path goes here');
 INSERT INTO question VALUES (DEFAULT, 1, 'What color is the sky?', 'A sky question.', 'file path goes here');
-INSERT INTO question VALUES (DEFAULT, 2, 'Where is Peru?', 'Map Question', null);
+
 
 CREATE TABLE multiple_choice_question (
     question_id int references question(question_id),
@@ -47,7 +47,7 @@ CREATE TABLE map_question (
     map_filepath text,
     answer_coordinates text);
     
-INSERT INTO map_question VALUES (3, 'filepath', '235, 76');
+
 
 CREATE TABLE answers (
     date date,
